@@ -1,0 +1,17 @@
+:root { color-scheme: dark; }
+body { margin: 0; font: 16px/1.4 system-ui, sans-serif; background: #11141a; color: #e6e6e6; }
+header { display: flex; gap: 1rem; align-items: center; padding: .75rem 1rem; background: #0b0d11; }
+h1 { font-size: 1.1rem; margin: 0; }
+.status { font-size: .8rem; padding: .15rem .5rem; border-radius: 999px; }
+.status.on { background: #16331c; color: #6ee787; }
+.status.off { background: #331616; color: #ff7b7b; }
+.clock { margin-left: auto; font-variant-numeric: tabular-nums; font-size: 1.2rem; }
+.panel { padding: 1rem; }
+#timings-list { list-style: none; margin: 0; padding: 0; }
+.timing { display: flex; justify-content: space-between; padding: .4rem .6rem; border-bottom: 1px solid #20242c; }
+.timing .eta { font-variant-numeric: tabular-nums; color: #9ecbff; }
+.cat-rune .name::before { content: "🔵 "; }
+.cat-neutral .name::before { content: "🟤 "; }
+.cat-stack .name::before { content: "📦 "; }
+.cat-lotus .name::before { content: "🌸 "; }
+.cat-cycle .name::before { content: "🌗 "; }
