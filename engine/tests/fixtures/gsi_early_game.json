@@ -1,0 +1,41 @@
+{
+  "provider": {"name": "Dota 2", "appid": 570, "version": 47, "timestamp": 1700000000},
+  "map": {
+    "name": "start",
+    "matchid": "7654321000",
+    "game_time": 130,
+    "clock_time": 95,
+    "daytime": true,
+    "game_state": "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS",
+    "paused": false,
+    "win_team": "none"
+  },
+  "player": {
+    "steamid": "76561198000000000",
+    "name": "tahseen",
+    "activity": "playing",
+    "kills": 1, "deaths": 0, "assists": 2,
+    "last_hits": 20, "denies": 3,
+    "gold": 1500, "gold_reliable": 300, "gold_unreliable": 1200,
+    "gpm": 380, "xpm": 420
+  },
+  "hero": {
+    "id": 35,
+    "name": "npc_dota_hero_sniper",
+    "level": 6,
+    "alive": true,
+    "respawn_seconds": 0,
+    "buyback_cost": 300,
+    "buyback_cooldown": 0,
+    "health": 820, "max_health": 820,
+    "mana": 300, "max_mana": 300
+  },
+  "items": {
+    "slot0": {"name": "item_phase_boots", "purchaser": 0},
+    "slot1": {"name": "item_magic_wand", "purchaser": 0},
+    "slot2": {"name": "empty"},
+    "slot3": {"name": "empty"},
+    "slot4": {"name": "empty"},
+    "slot5": {"name": "empty"}
+  }
+}
