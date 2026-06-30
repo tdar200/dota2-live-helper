@@ -26,3 +26,15 @@ def test_ws_receives_advice_after_gsi_post():
         assert data["clock_time"] == 95
         assert isinstance(data["timings"], list)
         assert len(data["timings"]) >= 1
+
+
+def test_replay_shape_clock_override_changes_advice():
+    client = TestClient(app)
+    raw = json.loads(FIX.read_text())
+    raw["map"]["clock_time"] = 360  # power rune is due now
+    client.post("/gsi", json=raw)
+    with client.websocket_connect("/ws") as websocket:
+        data = websocket.receive_json()
+        assert data["clock_time"] == 360
+        names = [t["name"] for t in data["timings"]]
+        assert "Power rune" in names
