@@ -18,7 +18,7 @@ class Hub:
     async def broadcast(self, message: dict) -> None:
         self.last = message
         dead = []
-        for ws in self.clients:
+        for ws in list(self.clients):
             try:
                 await ws.send_json(message)
             except Exception:
