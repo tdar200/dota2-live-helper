@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Replay a recorded GSI fixture into the engine for offline testing."""
+"""Replay a recorded GSI fixture into the engine for offline testing.
+
+When --clock is specified, it sets the starting map.clock_time and advances by
++1 second per repeat, so countdowns visibly update during offline replay.
+"""
 import argparse
 import json
 import time
@@ -17,7 +21,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("fixture")
     ap.add_argument("--url", default="http://127.0.0.1:3000/gsi")
-    ap.add_argument("--clock", type=int, default=None, help="override map.clock_time")
+    ap.add_argument("--clock", type=int, default=None, help="starting map.clock_time (advances +1s per repeat)")
     ap.add_argument("--repeat", type=int, default=1)
     ap.add_argument("--interval", type=float, default=1.0)
     args = ap.parse_args()
