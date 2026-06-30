@@ -39,3 +39,16 @@ def test_sorted_by_soonest():
     events = [ev("a", 0, 300), ev("b", 0, 120)]
     hits = next_occurrences(50, events)
     assert [h.name for h in hits] == ["b", "a"]  # b next at 120, a next at 300
+
+
+from app.timing_constants import GAME_EVENTS
+
+
+def test_constants_produce_sorted_upcoming_events_at_5min():
+    hits = next_occurrences(300, GAME_EVENTS)  # at clock 5:00
+    assert hits, "expected upcoming events at 5:00"
+    # sorted ascending and all in the future-or-now
+    assert all(h.seconds_until >= 0 for h in hits)
+    assert hits == sorted(hits, key=lambda h: h.seconds_until)
+    names = {h.name for h in hits}
+    assert "Power rune" in names  # next power rune at 6:00 -> 60s away
