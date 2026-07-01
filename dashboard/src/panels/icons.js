@@ -16,16 +16,18 @@ export function heroIconUrl(key) {
   return key ? HERO_CDN + String(key).replace(/^npc_dota_hero_/, "") + ".png" : "";
 }
 
-// Decorative <img>: adjacent text is the accessible label (alt=""), lazy-loaded,
-// self-hides on error so a broken asset never renders a broken-image box.
+// Decorative <img>: adjacent text is the accessible label (alt=""), lazy-loaded.
+// On error the <img> REMOVES itself from the DOM (not display:none) so it leaves
+// no trace — the text chip is untouched and CSS `:has(.i-hero)` rules (e.g. the
+// team-color dot) correctly revert to the no-portrait state.
 export function itemImg(key) {
   return key
-    ? `<img class="i-item" src="${itemIconUrl(key)}" alt="" loading="lazy" onerror="this.style.display='none'">`
+    ? `<img class="i-item" src="${itemIconUrl(key)}" alt="" loading="lazy" onerror="this.remove()">`
     : "";
 }
 
 export function heroImg(key) {
   return key
-    ? `<img class="i-hero" src="${heroIconUrl(key)}" alt="" loading="lazy" onerror="this.style.display='none'">`
+    ? `<img class="i-hero" src="${heroIconUrl(key)}" alt="" loading="lazy" onerror="this.remove()">`
     : "";
 }
