@@ -13,41 +13,54 @@
       <span id="clock" class="clock">--:--</span>
     </header>
     <main>
-      <section id="timings-panel" class="panel">
-        <h2>Timings</h2>
-        <ul id="timings-list"></ul>
-      </section>
-      <section id="enemies-panel" class="panel">
-        <h2>Enemy lineup</h2>
-        <div id="enemy-chips"></div>
-        <input id="enemy-search" list="hero-list" placeholder="add enemy hero…" autocomplete="off" />
-        <datalist id="hero-list"></datalist>
-      </section>
-      <section id="build-panel" class="panel">
-        <h2>Build coach</h2>
-        <div id="build-body"><em>waiting for game…</em></div>
-      </section>
-      <section id="allies-panel" class="panel">
-        <h2>Ally lineup</h2>
-        <div id="ally-chips"></div>
-        <input id="ally-search" list="hero-list" placeholder="add ally hero…" autocomplete="off" />
-      </section>
-      <section id="draft-panel" class="panel">
-        <h2>Draft — pick ranking</h2>
-        <div id="draft-body"><em>enter the enemy lineup…</em></div>
-      </section>
-      <section id="macro-panel" class="panel">
-        <h2>Macro</h2>
-        <div class="winbar"><div id="win-fill"></div><span id="win-pct">—</span></div>
-        <label class="nwl">Net-worth lead
-          <input id="nwl-input" type="number" step="500" placeholder="e.g. 4000" />
-        </label>
-        <div id="macro-rec">—</div>
-        <ul id="macro-reasons"></ul>
-        <button id="rosh-btn" type="button">Rosh died</button>
-        <button id="rosh-clear" type="button">clear</button>
-        <span id="rosh-info"></span>
-      </section>
+      <nav id="tabs">
+        <button id="tab-live" class="tab active">Live</button>
+        <button id="tab-review" class="tab">Review</button>
+      </nav>
+      <div id="live-view">
+        <section id="timings-panel" class="panel">
+          <h2>Timings</h2>
+          <ul id="timings-list"></ul>
+        </section>
+        <section id="enemies-panel" class="panel">
+          <h2>Enemy lineup</h2>
+          <div id="enemy-chips"></div>
+          <input id="enemy-search" list="hero-list" placeholder="add enemy hero…" autocomplete="off" />
+          <datalist id="hero-list"></datalist>
+        </section>
+        <section id="build-panel" class="panel">
+          <h2>Build coach</h2>
+          <div id="build-body"><em>waiting for game…</em></div>
+        </section>
+        <section id="allies-panel" class="panel">
+          <h2>Ally lineup</h2>
+          <div id="ally-chips"></div>
+          <input id="ally-search" list="hero-list" placeholder="add ally hero…" autocomplete="off" />
+        </section>
+        <section id="draft-panel" class="panel">
+          <h2>Draft — pick ranking</h2>
+          <div id="draft-body"><em>enter the enemy lineup…</em></div>
+        </section>
+        <section id="macro-panel" class="panel">
+          <h2>Macro</h2>
+          <div class="winbar"><div id="win-fill"></div><span id="win-pct">—</span></div>
+          <label class="nwl">Net-worth lead
+            <input id="nwl-input" type="number" step="500" placeholder="e.g. 4000" />
+          </label>
+          <div id="macro-rec">—</div>
+          <ul id="macro-reasons"></ul>
+          <button id="rosh-btn" type="button">Rosh died</button>
+          <button id="rosh-clear" type="button">clear</button>
+          <span id="rosh-info"></span>
+        </section>
+      </div>
+      <div id="review-view" hidden>
+        <section class="panel">
+          <h2>Post-game review</h2>
+          <select id="review-select"><option value="">— select match —</option></select>
+          <div id="review-body"><em>select a match…</em></div>
+        </section>
+      </div>
     </main>
     <script type="module" src="/src/main.js"></script>
   </body>
