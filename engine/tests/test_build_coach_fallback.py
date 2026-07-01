@@ -112,6 +112,20 @@ def test_no_data_returns_none_source():
     assert adv.source == "none"
 
 
+def test_none_source_uses_display_name():
+    """hero with no curated build AND empty item_build_db, but hero_names has a display."""
+    state = GameState(items=[], clock_time=None)
+    state.hero = HeroState(name="npc_dota_hero_silencer")
+    ctx = AdviceContext(
+        state=state,
+        item_build_db={},
+        hero_names={"npc_dota_hero_silencer": "Silencer"},
+    )
+    adv = build_coach.advise(ctx)
+    assert adv.source == "none" and adv.has_build is False
+    assert adv.hero_display == "Silencer"
+
+
 def test_curated_unchanged():
     """Curated hero ignores item_build_db; returns source='curated' with next_core."""
     state = GameState(items=[], clock_time=300)

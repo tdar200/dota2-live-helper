@@ -59,7 +59,8 @@ def advise(ctx: AdviceContext) -> BuildAdvice:
     if build is None:
         ib = ctx.item_build_db.get(hero) if hero else None
         if ib is None:
-            return BuildAdvice(has_build=False, source="none", hero=hero)
+            return BuildAdvice(has_build=False, source="none", hero=hero,
+                               hero_display=ctx.hero_names.get(hero, hero))
         owned = set(ctx.state.items)
         order = ["start_game", "early_game", "mid_game", "late_game"]
         phases = {

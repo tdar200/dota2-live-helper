@@ -269,14 +269,11 @@ def _get_json(url: str) -> dict:
                 print(f"  521 Cloudflare error, sleeping 30 s…", file=sys.stderr)
                 time.sleep(30)
             else:
-                print(f"ERROR: HTTP {e.code} from {url}", file=sys.stderr)
-                sys.exit(1)
-        except urllib.error.URLError as e:
-            print(f"ERROR: could not reach OpenDota: {e.reason}", file=sys.stderr)
-            sys.exit(1)
+                raise
+        except urllib.error.URLError:
+            raise
 
-    print(f"ERROR: gave up after 3 attempts on {url}", file=sys.stderr)
-    sys.exit(1)
+    raise RuntimeError(f"gave up after 3 attempts on {url}")
 
 
 def fetch_constants() -> tuple[dict, dict]:
@@ -311,7 +308,12 @@ def main() -> None:
     # Real hero ids from heroes.json — non-contiguous (never range(1, 128))
     hero_list = [(h["id"], h["key"], h["display"]) for h in heroes]
 
-    item_ids, items = fetch_constants()
+    try:
+        item_ids, items = fetch_constants()
+    except Exception as exc:
+        print(f"FATAL: could not fetch constants (item_ids/items required): {exc}",
+              file=sys.stderr)
+        sys.exit(1)
 
     out_heroes: dict[str, dict] = {}
     total = len(hero_list)
@@ -334,9 +336,9 @@ def main() -> None:
             )
             out_heroes[hero_key] = entry
             print(f"  ✓ {hero_display}")
-        except (KeyError, ValueError, TypeError) as exc:
-            print(f"  ! unresolved data for {hero_key} (id={hid}): {exc} — skipping",
-                  file=sys.stderr)
+        except (KeyError, ValueError, TypeError,
+                urllib.error.URLError, urllib.error.HTTPError) as exc:
+            print(f"  skip hero {hero_key}: {exc}", file=sys.stderr)
             continue
 
     CACHE.parent.mkdir(parents=True, exist_ok=True)
