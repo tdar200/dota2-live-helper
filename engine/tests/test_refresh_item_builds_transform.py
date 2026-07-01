@@ -9,6 +9,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
 
 from refresh_item_builds import (
     CONSUMABLE_BLOCKLIST,
+    FINISHED_WHITELIST,
+    INTERMEDIATE_BLOCKLIST,
     PHASE_MAP,
     component_part_keys,
     resolve_item,
@@ -456,3 +458,86 @@ def test_finished_whitelist_keeps_blink_and_ghost():
     assert resolve_item(1, item_ids, items, pk) is not None   # blink kept
     assert resolve_item(3, item_ids, items, pk) is not None   # ghost kept
     assert resolve_item(2, item_ids, items, pk) is None        # mystic_staff dropped
+
+
+# ===========================================================================
+# INTERMEDIATE_BLOCKLIST
+# ===========================================================================
+
+def test_intermediate_blocklist_is_exactly_the_trio():
+    """INTERMEDIATE_BLOCKLIST must be exactly the three stepping-stone items."""
+    assert INTERMEDIATE_BLOCKLIST == {"yasha", "sange", "kaya"}
+
+
+def test_resolve_item_drops_yasha():
+    """resolve_item on an id that resolves to 'yasha' (assembled with components,
+    normal qual) must return None via the INTERMEDIATE_BLOCKLIST check."""
+    item_ids = {"55": "yasha"}
+    items = {
+        "yasha": {
+            "dname": "Yasha",
+            "qual": "artifact",
+            "components": ["blade_of_alacrity", "boots_of_elves"],
+        }
+    }
+    # yasha has components so the structural rule won't catch it; blocklist must
+    result = resolve_item(55, item_ids, items, set())
+    assert result is None
+
+
+def test_resolve_item_keeps_finals():
+    """Ensure force_staff (assembled, not blocklisted) is kept, and that
+    'sange_and_yasha' is NOT caught by the 'sange' blocklist entry (substring
+    guard — blocklist checks exact name equality)."""
+    item_ids = {
+        "56": "force_staff",
+        "57": "sange_and_yasha",
+    }
+    items = {
+        "force_staff": {
+            "dname": "Force Staff",
+            "qual": "common",
+            "components": ["staff_of_wizardry", "ring_of_regen"],
+        },
+        "sange_and_yasha": {
+            "dname": "Sange and Yasha",
+            "qual": "artifact",
+            "components": ["sange", "yasha"],
+        },
+    }
+    assert resolve_item(56, item_ids, items, set()) is not None   # force_staff kept
+    result_say = resolve_item(57, item_ids, items, set())
+    assert result_say is not None                                  # sange_and_yasha kept
+    assert result_say["key"] == "item_sange_and_yasha"
+
+
+def test_transform_backfills_after_intermediate_drop():
+    """When a high-count item is dropped by INTERMEDIATE_BLOCKLIST the next
+    real item in the sorted list fills its slot — phase length equals top_n."""
+    # Build 9 unique finished items + yasha as highest-count stepping stone
+    item_ids_local: dict[str, str] = {"99": "yasha"}
+    items_local: dict[str, dict] = {
+        "yasha": {
+            "dname": "Yasha",
+            "qual": "artifact",
+            "components": ["blade_of_alacrity", "boots_of_elves"],
+        }
+    }
+    # Add 9 plain finished items
+    for i in range(9):
+        key = f"real_{i}"
+        item_ids_local[str(i)] = key
+        items_local[key] = {"dname": f"Real Item {i}", "qual": "artifact"}
+
+    # yasha gets the highest count, real items follow with descending counts
+    pop = {
+        "mid_game_items": {
+            "99": 9999,
+            **{str(i): 100 - i for i in range(9)},
+        }
+    }
+    out = transform_item_popularity(pop, item_ids_local, items_local, top_n=4)
+    mid = out.get("mid_game", [])
+    keys = [it["key"] for it in mid]
+    assert "item_yasha" not in keys          # blocklisted, absent
+    assert len(mid) == 4                     # backfilled to cap, not short by one

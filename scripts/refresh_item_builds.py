@@ -53,6 +53,11 @@ CONSUMABLE_BLOCKLIST: set[str] = {
 # are real items players buy and show in a build.
 FINISHED_WHITELIST: set[str] = {"blink", "ghost"}
 
+# Assembled stat items that are ALWAYS a stepping stone to a final item
+# (yasha/sange/kaya -> Manta / Sange&Yasha / Diffusal / Kaya-and-Sange / Yasha-and-Kaya).
+# Structural rule can't catch these (they have components); curated demote.
+INTERMEDIATE_BLOCKLIST: set[str] = {"yasha", "sange", "kaya"}
+
 PHASE_MAP: dict[str, str] = {
     "start_game_items": "start_game",
     "early_game_items": "early_game",
@@ -109,6 +114,9 @@ def resolve_item(
         return None
 
     if name in CONSUMABLE_BLOCKLIST:
+        return None
+
+    if name in INTERMEDIATE_BLOCKLIST:
         return None
 
     if meta.get("qual") == "consumable":
