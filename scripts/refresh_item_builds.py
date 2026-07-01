@@ -4,7 +4,7 @@
 Fetches two constant endpoints once, then for each of the 127 real hero ids
 (from heroes.json — non-contiguous, never range(1,128)) hits:
   GET /api/heroes/{hid}/itemPopularity
-  GET /api/heroes/{hid}/benchmarks
+  GET /api/benchmarks?hero_id={hid}
 
 Writes engine/app/cache/item_builds.json (gitignored).
 
@@ -295,8 +295,8 @@ def fetch_item_popularity(hid: int) -> dict:
 
 
 def fetch_benchmarks(hid: int) -> dict:
-    """GET /api/heroes/{hid}/benchmarks → raw response dict (has "result" key)."""
-    return _get_json(f"{OPENDOTA}/heroes/{hid}/benchmarks")
+    """GET /api/benchmarks?hero_id={hid} → raw response dict (has "result" key)."""
+    return _get_json(f"{OPENDOTA}/benchmarks?hero_id={hid}")
 
 
 # ---------------------------------------------------------------------------
