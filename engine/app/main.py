@@ -1,10 +1,11 @@
 from pathlib import Path
-from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from app.state import GameState
 from app.advice import build_advice, BUILD_DATA
 from app.hub import Hub
+from app.reviews import load_review, list_reviews
 
 app = FastAPI(title="Dota 2 Live Helper")
 app.add_middleware(
@@ -73,6 +74,19 @@ async def roshan(request: Request) -> dict:
     STATE.roshan_dead_clock = None if body.get("clear") else STATE.clock_time
     await HUB.broadcast(build_advice(STATE).model_dump())
     return {"ok": True, "roshan_dead_clock": STATE.roshan_dead_clock}
+
+
+@app.get("/review/{match_id}")
+async def review(match_id: int) -> dict:
+    report = load_review(match_id)
+    if report is None:
+        raise HTTPException(status_code=404, detail="not analyzed")
+    return report
+
+
+@app.get("/reviews")
+async def reviews() -> list[dict]:
+    return list_reviews()
 
 
 if _DIST.exists():
