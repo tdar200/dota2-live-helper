@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from app.state import GameState
 
 
@@ -7,3 +7,8 @@ class AdviceContext:
     state: GameState
     horizon_s: int = 600
     limit: int = 6
+    enemy_heroes: list[str] = field(default_factory=list)
+    build_db: dict = field(default_factory=dict)
+    trait_db: dict = field(default_factory=dict)
+    item_names: dict = field(default_factory=dict)
+    hero_names: dict = field(default_factory=dict)
