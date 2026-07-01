@@ -67,13 +67,17 @@ def test_phase_map_values():
 # CONSUMABLE_BLOCKLIST
 # ===========================================================================
 
-def test_blocklist_contains_required_entries():
-    required = {
-        "ward_observer", "ward_sentry", "tpscroll", "dust",
-        "smoke_of_deceit", "tango", "clarity", "flask",
-        "enchanted_mango", "faerie_fire", "branches",
+def test_blocklist_is_exactly_the_consumable_token_set():
+    """Blocklist must be EXACTLY the spec consumables/tokens set.
+
+    Prevents re-adding finished items (lotus_orb, aghanims_shard, etc).
+    Genuine consumables (tome_of_knowledge, cheese) are dropped by
+    qual filter and don't need blocklisting.
+    """
+    assert CONSUMABLE_BLOCKLIST == {
+        "ward_observer", "ward_sentry", "tpscroll", "dust", "smoke_of_deceit",
+        "tango", "clarity", "flask", "enchanted_mango", "faerie_fire", "branches",
     }
-    assert required.issubset(CONSUMABLE_BLOCKLIST)
 
 
 # ===========================================================================

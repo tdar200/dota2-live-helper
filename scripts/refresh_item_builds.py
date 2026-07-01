@@ -45,10 +45,6 @@ CONSUMABLE_BLOCKLIST: set[str] = {
     "enchanted_mango",
     "faerie_fire",
     "branches",
-    "tome_of_knowledge",
-    "cheese",
-    "aghanims_shard",   # consumable upgrade token
-    "lotus_orb",        # controversial, but often treated as consumable in early
 }
 
 PHASE_MAP: dict[str, str] = {
