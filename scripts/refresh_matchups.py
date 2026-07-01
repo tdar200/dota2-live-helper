@@ -4,9 +4,11 @@
 Only network caller in the project. Needs env STRATZ_API_KEY (free key from stratz.com).
 Schema: verify against https://api.stratz.com/graphiql if Stratz changes field names.
 """
+import datetime
 import json
 import os
 import sys
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -54,8 +56,20 @@ def fetch_matchup(hero_id: int, api_key: str) -> dict:
             "User-Agent": "STRATZ_API",  # Stratz requires a UA
         },
     )
-    with urllib.request.urlopen(req) as resp:
-        data = json.loads(resp.read())
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            data = json.loads(resp.read())
+    except urllib.error.HTTPError as e:
+        print(f"ERROR: Stratz HTTP {e.code} for hero {hero_id} "
+              f"({'bad/expired STRATZ_API_KEY' if e.code == 401 else 'rate limit' if e.code == 429 else 'server error'})",
+              file=sys.stderr)
+        sys.exit(1)
+    except urllib.error.URLError as e:
+        print(f"ERROR: could not reach Stratz: {e.reason}", file=sys.stderr)
+        sys.exit(1)
+    if data.get("errors"):
+        print(f"ERROR: Stratz GraphQL errors: {data['errors']}", file=sys.stderr)
+        sys.exit(1)
     matchups = data["data"]["heroStats"]["matchUp"]
     return matchups[0] if matchups else {"vs": [], "with": []}
 
@@ -87,7 +101,7 @@ def main() -> None:
 
     CACHE.parent.mkdir(parents=True, exist_ok=True)
     CACHE.write_text(json.dumps(
-        {"bracket": "HERALD", "generated": "run-date", "heroes": out_heroes}, indent=2))
+        {"bracket": "HERALD", "generated": datetime.datetime.now(datetime.timezone.utc).isoformat(), "heroes": out_heroes}, indent=2))
     print(f"Wrote {CACHE} ({len(out_heroes)} heroes)")
 
 
