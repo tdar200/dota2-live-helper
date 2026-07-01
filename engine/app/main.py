@@ -46,6 +46,14 @@ async def enemies(request: Request) -> dict:
     return {"ok": True, "count": len(STATE.enemy_heroes)}
 
 
+@app.post("/allies")
+async def allies(request: Request) -> dict:
+    body = await request.json()
+    STATE.ally_heroes = list(body.get("heroes", []))
+    await HUB.broadcast(build_advice(STATE).model_dump())
+    return {"ok": True, "count": len(STATE.ally_heroes)}
+
+
 @app.get("/heroes")
 async def heroes() -> list[dict]:
     return BUILD_DATA.heroes
