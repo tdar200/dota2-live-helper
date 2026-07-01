@@ -4,6 +4,7 @@ import { renderBuild } from "./panels/build.js";
 import { initEnemies } from "./panels/enemies.js";
 import { renderDraft } from "./panels/draft.js";
 import { initAllies } from "./panels/allies.js";
+import { renderMacro, initMacroControls } from "./panels/macro.js";
 
 // Single-process: engine serves this page (same host:port). Vite dev (5173) -> engine :3000.
 const ENGINE_HOST = location.port === "5173" ? `${location.hostname}:3000` : location.host;
@@ -20,8 +21,10 @@ function onMessage(payload) {
   renderTimings(payload);
   renderBuild(payload);
   renderDraft(payload);
+  renderMacro(payload);
 }
 
 initEnemies(ENGINE_HOST);
 initAllies(ENGINE_HOST);
+initMacroControls(ENGINE_HOST);
 connect(WS_URL, onMessage, onStatus);

@@ -13,6 +13,7 @@ class HeroState(BaseModel):
     alive: bool | None = None
     buyback_cost: int | None = None
     buyback_cooldown: int | None = None
+    respawn_seconds: int | None = None
 
 
 class PlayerState(BaseModel):
@@ -29,6 +30,8 @@ class GameState(BaseModel):
     items: list[str] = Field(default_factory=list)
     enemy_heroes: list[str] = Field(default_factory=list)
     ally_heroes: list[str] = Field(default_factory=list)
+    net_worth_lead: int | None = None
+    roshan_dead_clock: int | None = None
     raw: dict = Field(default_factory=dict)
 
     def update_from_raw(self, raw: dict) -> None:

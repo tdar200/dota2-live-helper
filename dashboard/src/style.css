@@ -41,3 +41,16 @@ ol.picks { list-style: none; margin: 0; padding: 0; }
 .pick .pscore { color: #9ee7a0; margin-left: auto; font-variant-numeric: tabular-nums; }
 .pick .pwhy { flex-basis: 100%; font-size: .8rem; color: #8a93a0; }
 .countered { color: #ff9a9a; font-size: .8rem; }
+.winbar { position: relative; height: 22px; background: #331616; border-radius: 6px; overflow: hidden; margin-bottom: .5rem; }
+#win-fill { height: 100%; width: 0; background: linear-gradient(90deg, #2f6b3a, #6ee787); transition: width .3s; }
+.winbar #win-pct { position: absolute; top: 0; left: 50%; transform: translateX(-50%); line-height: 22px; font-variant-numeric: tabular-nums; }
+.nwl { display: block; font-size: .8rem; color: #b8c0cc; margin-bottom: .5rem; }
+#nwl-input { width: 8rem; margin-left: .4rem; background: #0b0d11; color: #e6e6e6; border: 1px solid #20242c; border-radius: 6px; padding: .3rem; }
+#macro-rec { font-size: 1.4rem; font-weight: 700; margin: .3rem 0; }
+.rec-PUSH, .rec-TAKE_ROSH { color: #6ee787; }
+.rec-DEFEND, .rec-PLAY_SAFE { color: #ff9a9a; }
+.rec-FARM, .rec-GROUP, .rec-SMOKE { color: #9ecbff; }
+#macro-reasons { list-style: none; margin: .2rem 0; padding: 0; font-size: .82rem; color: #8a93a0; }
+#macro-reasons li { padding: .1rem 0; }
+#rosh-btn, #rosh-clear { background: #20242c; color: #e6e6e6; border: 1px solid #333; border-radius: 6px; padding: .3rem .6rem; cursor: pointer; }
+#rosh-info { font-size: .82rem; color: #ffd479; margin-left: .5rem; }

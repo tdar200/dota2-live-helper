@@ -27,6 +27,7 @@ def parse_gsi(raw: dict) -> GameState:
             alive=h.get("alive"),
             buyback_cost=h.get("buyback_cost"),
             buyback_cooldown=h.get("buyback_cooldown"),
+            respawn_seconds=h.get("respawn_seconds"),
         ),
         player=PlayerState(
             gold=p.get("gold"),
