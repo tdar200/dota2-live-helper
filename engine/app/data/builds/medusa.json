@@ -1,0 +1,15 @@
+{
+  "hero": "npc_dota_hero_medusa",
+  "display": "Medusa",
+  "source": "KB medusa-mana-stack-build.md",
+  "verified": true,
+  "skill_order": "Max Mystic Snake (Q) for mana refill + nuke; Max Split Shot (W) for farm/DPS; Stone Gaze at 6/12/18",
+  "talents": {"10": "+10 Strength", "15": "+150 Mystic Snake Damage", "20": "+3 Split Shot Targets", "25": "+Mana Shield Damage Conversion"},
+  "starting_items": ["item_tango", "item_branches", "item_circlet", "item_slippers"],
+  "core_items": ["item_power_treads", "item_manta", "item_hurricane_pike", "item_skadi", "item_sphere"],
+  "situational": [
+    {"item": "item_butterfly", "trait": "evasion", "note": "vs right-click carry lineups; Butterfly evasion bolsters Mana Shield survival"},
+    {"item": "item_black_king_bar", "trait": "heavy_magic", "note": "vs heavy magic burst that drains Mana Shield instantly"},
+    {"item": "item_mjollnir", "trait": "illusions_summons", "note": "chain lightning through Split Shot cleanses illusion / summon stacks"}
+  ]
+}

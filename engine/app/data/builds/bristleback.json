@@ -1,0 +1,15 @@
+{
+  "hero": "npc_dota_hero_bristleback",
+  "display": "Bristleback",
+  "source": "researched 7.41d standard build",
+  "verified": false,
+  "skill_order": "Max Quill Spray (W) for DPS; value Bristleback (E) passive for damage reduction; value Viscous Nasal Goo (Q) for armor stacks; Warpath (R) passive ultimate",
+  "talents": {"10": "+Quill Spray Damage", "15": "+Quill Spray Radius", "20": "+Warpath Stacks", "25": "+Bristleback 45 Degrees"},
+  "starting_items": ["item_tango", "item_gauntlets", "item_gauntlets", "item_branches"],
+  "core_items": ["item_phase_boots", "item_vanguard", "item_crimson_guard", "item_pipe", "item_heart"],
+  "situational": [
+    {"item": "item_black_king_bar", "trait": "lockdown_silence", "note": "vs heavy stun / silence preventing Quill spam; also lets you cast freely"},
+    {"item": "item_assault", "trait": "high_armor", "note": "AC armor aura helps team DPS through armored enemies"},
+    {"item": "item_spirit_vessel", "trait": "healing_regen", "note": "reduces healing/regen on high-regen enemies hit by Quill Spray"}
+  ]
+}

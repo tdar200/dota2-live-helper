@@ -15,3 +15,17 @@ h1 { font-size: 1.1rem; margin: 0; }
 .cat-stack .name::before { content: "📦 "; }
 .cat-lotus .name::before { content: "🌸 "; }
 .cat-cycle .name::before { content: "🌗 "; }
+#enemy-chips { display: flex; flex-wrap: wrap; gap: .3rem; margin-bottom: .4rem; }
+.chip { background: #3a2330; color: #ffb3c8; padding: .15rem .5rem; border-radius: 999px; cursor: pointer; font-size: .85rem; }
+#enemy-search { width: 100%; box-sizing: border-box; background: #0b0d11; color: #e6e6e6; border: 1px solid #20242c; border-radius: 6px; padding: .4rem; }
+#build-panel .hero { font-weight: 600; margin-bottom: .2rem; }
+#build-panel .next { font-size: 1.15rem; margin: .2rem 0; }
+#build-panel .next strong { color: #9ee7a0; }
+.coreline { display: flex; flex-wrap: wrap; gap: .35rem; margin: .3rem 0; }
+.core { padding: .1rem .4rem; border-radius: 6px; background: #20242c; font-size: .85rem; }
+.core.owned { color: #6ee787; }
+#build-panel .skill, #build-panel .talent { font-size: .85rem; color: #b8c0cc; }
+ul.situational { list-style: none; margin: .4rem 0 0; padding: 0; }
+.sit { padding: .2rem 0; color: #6b7280; }
+.sit.on { color: #ffd479; }
+.sit .why { color: #8a93a0; font-size: .8rem; }

@@ -1,0 +1,15 @@
+{
+  "hero": "npc_dota_hero_phantom_assassin",
+  "display": "Phantom Assassin",
+  "source": "KB phantom-assassin-deadly-focus-build.md",
+  "verified": true,
+  "skill_order": "Max Stifling Dagger (Q); value Phantom Strike; Fan of Knives for Break; Coup de Grace 6/12/18",
+  "talents": {"10": "-1.5s Stifling Dagger Cooldown", "15": "+25% Stifling Dagger Damage", "20": "+40 Phantom Strike Attack Speed", "25": "Triple Strike Stifling Dagger"},
+  "starting_items": ["item_tango", "item_quelling_blade", "item_slippers", "item_circlet"],
+  "core_items": ["item_phase_boots", "item_bfury", "item_desolator", "item_ultimate_scepter", "item_abyssal_blade"],
+  "situational": [
+    {"item": "item_black_king_bar", "trait": "heavy_magic", "note": "vs heavy magic burst"},
+    {"item": "item_monkey_king_bar", "trait": "evasion", "note": "vs evasion (Butterfly/Halberd/PA mirror)"},
+    {"item": "item_nullifier", "trait": "tanky_hp", "note": "vs heavy armor / passives (+Break)"}
+  ]
+}

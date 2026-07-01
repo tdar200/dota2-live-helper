@@ -1,0 +1,15 @@
+{
+  "hero": "npc_dota_hero_riki",
+  "display": "Riki",
+  "source": "KB riki-max-damage.md",
+  "verified": true,
+  "skill_order": "Max Cloak and Dagger (backstab positioning); 1 early Smoke Screen; Max Blink Strike; Tricks of the Trade 6/12/18",
+  "talents": {"10": "+10 Agility", "15": "+25 Attack Speed", "20": "+Backstab Multiplier", "25": "+500 Blink Strike Cast Range"},
+  "starting_items": ["item_tango", "item_quelling_blade", "item_slippers", "item_branches"],
+  "core_items": ["item_power_treads", "item_diffusal_blade", "item_butterfly", "item_greater_crit", "item_skadi"],
+  "situational": [
+    {"item": "item_black_king_bar", "trait": "heavy_magic", "note": "vs heavy magic / silence that stops the gank"},
+    {"item": "item_abyssal_blade", "trait": "lockdown_silence", "note": "bash locks target for prolonged backstab burst"},
+    {"item": "item_nullifier", "trait": "tanky_hp", "note": "dispel Ghost Scepter / Eul saves; strip defensive items"}
+  ]
+}

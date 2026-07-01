@@ -1,0 +1,19 @@
+{
+  "npc_dota_hero_zuus": ["heavy_magic"],
+  "npc_dota_hero_lina": ["heavy_magic"],
+  "npc_dota_hero_lion": ["heavy_magic", "lockdown_silence"],
+  "npc_dota_hero_phantom_assassin": ["evasion"],
+  "npc_dota_hero_windrunner": ["evasion"],
+  "npc_dota_hero_naga_siren": ["illusions_summons"],
+  "npc_dota_hero_broodmother": ["illusions_summons"],
+  "npc_dota_hero_riki": ["invisibility"],
+  "npc_dota_hero_bounty_hunter": ["invisibility"],
+  "npc_dota_hero_bristleback": ["high_armor", "healing_regen"],
+  "npc_dota_hero_shredder": ["high_armor"],
+  "npc_dota_hero_necrolyte": ["healing_regen"],
+  "npc_dota_hero_huskar": ["healing_regen"],
+  "npc_dota_hero_shadow_shaman": ["lockdown_silence"],
+  "npc_dota_hero_silencer": ["lockdown_silence"],
+  "npc_dota_hero_pudge": ["tanky_hp"],
+  "npc_dota_hero_centaur": ["tanky_hp"]
+}

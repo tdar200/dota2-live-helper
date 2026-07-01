@@ -3,7 +3,7 @@ from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from app.state import GameState
-from app.advice import build_advice
+from app.advice import build_advice, BUILD_DATA
 from app.hub import Hub
 
 app = FastAPI(title="Dota 2 Live Helper")
@@ -36,6 +36,19 @@ async def ws(websocket: WebSocket) -> None:
             await websocket.receive_text()  # we don't expect client messages; keeps it open
     except WebSocketDisconnect:
         HUB.disconnect(websocket)
+
+
+@app.post("/enemies")
+async def enemies(request: Request) -> dict:
+    body = await request.json()
+    STATE.enemy_heroes = list(body.get("heroes", []))
+    await HUB.broadcast(build_advice(STATE).model_dump())
+    return {"ok": True, "count": len(STATE.enemy_heroes)}
+
+
+@app.get("/heroes")
+async def heroes() -> list[dict]:
+    return BUILD_DATA.heroes
 
 
 if _DIST.exists():

@@ -27,6 +27,7 @@ class GameState(BaseModel):
     hero: HeroState = Field(default_factory=HeroState)
     player: PlayerState = Field(default_factory=PlayerState)
     items: list[str] = Field(default_factory=list)
+    enemy_heroes: list[str] = Field(default_factory=list)
     raw: dict = Field(default_factory=dict)
 
     def update_from_raw(self, raw: dict) -> None:

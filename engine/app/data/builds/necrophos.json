@@ -1,0 +1,15 @@
+{
+  "hero": "npc_dota_hero_necrolyte",
+  "display": "Necrophos",
+  "source": "researched 7.41d standard build",
+  "verified": false,
+  "skill_order": "Max Death Pulse (Q) for burst + heal; value Heartstopper Aura (W) passive DoT; Reaper's Scythe at 6/12/18",
+  "talents": {"10": "+Death Pulse Heal", "15": "+Death Pulse Damage", "20": "-Reaper's Scythe Cast Time", "25": "Global Reaper's Scythe"},
+  "starting_items": ["item_tango", "item_clarity", "item_branches", "item_circlet"],
+  "core_items": ["item_tranquil_boots", "item_radiance", "item_eternal_shroud", "item_ultimate_scepter", "item_shivas_guard"],
+  "situational": [
+    {"item": "item_black_king_bar", "trait": "lockdown_silence", "note": "vs heavy stun / silence preventing Death Pulse and Scythe casts"},
+    {"item": "item_nullifier", "trait": "tanky_hp", "note": "dispel defensive items on tanky enemies to allow Scythe execute"},
+    {"item": "item_lotus_orb", "trait": "heavy_magic", "note": "reflect targeted magic spells from heavy-magic enemies"}
+  ]
+}

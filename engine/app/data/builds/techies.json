@@ -1,0 +1,15 @@
+{
+  "hero": "npc_dota_hero_techies",
+  "display": "Techies",
+  "source": "KB techies-max-mine-damage.md",
+  "verified": true,
+  "skill_order": "Max Proximity Mines (Q); then Sticky Bomb (W) for slow; 1 pt Reactive Tazer; Blast Off at 6/12/18",
+  "talents": {"10": "-Proximity Mines Cooldown", "15": "+Proximity Mine Damage", "20": "+Sticky Bomb Slow Duration", "25": "-Mine Activation Delay"},
+  "starting_items": ["item_tango", "item_clarity", "item_branches", "item_wind_lace"],
+  "core_items": ["item_soul_ring", "item_arcane_boots", "item_veil_of_discord", "item_octarine_core", "item_ultimate_scepter", "item_ethereal_blade"],
+  "situational": [
+    {"item": "item_black_king_bar", "trait": "lockdown_silence", "note": "vs heavy stun/silence lineups diving Techies"},
+    {"item": "item_pipe", "trait": "heavy_magic", "note": "team magic resist aura vs heavy magic enemy lineup"},
+    {"item": "item_blade_mail", "trait": "tanky_hp", "note": "reflect damage on tanky enemies diving your mine field"}
+  ]
+}
