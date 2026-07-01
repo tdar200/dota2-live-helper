@@ -7,6 +7,8 @@ from app.advisors import build_coach
 from app.advisors import draft as draft_advisor
 from app.advisors import macro as macro_advisor
 from app.advisors import farm as farm_advisor
+from app.advisors import abilities as abilities_advisor
+from app.advisors.abilities import SpellsAdvice
 from app.advisors.build_coach import BuildAdvice
 from app.advisors.draft import DraftAdvice
 from app.advisors.macro import MacroAdvice
@@ -15,11 +17,13 @@ from app.build_data import load_build_data
 from app.matchups import load_matchups
 from app.winprob import load_winprob
 from app.item_builds import load_item_builds
+from app.hero_meta import load_hero_meta
 
 BUILD_DATA = load_build_data()
 MATCHUP_DATA = load_matchups()
 WINPROB_TABLE = load_winprob()
 ITEM_BUILDS = load_item_builds()
+HERO_META = load_hero_meta()
 
 
 class AdvicePayload(BaseModel):
@@ -30,6 +34,7 @@ class AdvicePayload(BaseModel):
     draft: DraftAdvice | None = None
     macro: MacroAdvice | None = None
     farm: FarmAdvice | None = None
+    spells: SpellsAdvice | None = None
 
 
 def build_advice(state: GameState, *, horizon_s: int = 600, limit: int = 6) -> AdvicePayload:
@@ -46,6 +51,7 @@ def build_advice(state: GameState, *, horizon_s: int = 600, limit: int = 6) -> A
         roshan_dead_clock=state.roshan_dead_clock,
         winprob_table=WINPROB_TABLE,
         item_build_db=ITEM_BUILDS.heroes,
+        hero_meta_db=HERO_META.heroes,
     )
     return AdvicePayload(
         clock_time=state.clock_time,
@@ -54,4 +60,5 @@ def build_advice(state: GameState, *, horizon_s: int = 600, limit: int = 6) -> A
         draft=draft_advisor.advise(ctx),
         macro=macro_advisor.advise(ctx),
         farm=farm_advisor.advise(ctx),
+        spells=abilities_advisor.advise(ctx),
     )

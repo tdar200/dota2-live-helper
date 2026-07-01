@@ -39,6 +39,9 @@ class BuildAdvice(BaseModel):
     source: str = "curated"
     phases: dict[str, list[CoreItem]] = Field(default_factory=dict)
     suggested_next: CoreItem | None = None
+    # Herald (bracket 1) pub win-rate for the current hero, from OpenDota
+    # heroStats (scripts/refresh_hero_meta.py). None when meta cache absent.
+    herald_winrate: float | None = None
 
 
 def _phase_for_clock(clock) -> str:
@@ -64,14 +67,21 @@ def _talent_for_level(talents: dict[str, str], level: int) -> str | None:
     return f"L{chosen}: {talents[str(chosen)]}"
 
 
+def _herald_winrate(ctx: AdviceContext, hero: str | None) -> float | None:
+    meta = ctx.hero_meta_db.get(hero) if hero else None
+    return getattr(meta, "herald_winrate", None) if meta is not None else None
+
+
 def advise(ctx: AdviceContext) -> BuildAdvice:
     hero = ctx.state.hero.name
+    herald_wr = _herald_winrate(ctx, hero)
     build = ctx.build_db.get(hero) if hero else None
     if build is None:
         ib = ctx.item_build_db.get(hero) if hero else None
         if ib is None:
             return BuildAdvice(has_build=False, source="none", hero=hero,
-                               hero_display=ctx.hero_names.get(hero, hero))
+                               hero_display=ctx.hero_names.get(hero, hero),
+                               herald_winrate=herald_wr)
         owned = set(ctx.state.items)
         order = ["start_game", "early_game", "mid_game", "late_game"]
         phases = {
@@ -91,6 +101,7 @@ def advise(ctx: AdviceContext) -> BuildAdvice:
         return BuildAdvice(
             has_build=True, source="opendota", hero=hero,
             hero_display=ib.display, phases=phases, suggested_next=suggested,
+            herald_winrate=herald_wr,
         )
 
     owned = set(ctx.state.items)
@@ -122,4 +133,5 @@ def advise(ctx: AdviceContext) -> BuildAdvice:
         skill_next=build.skill_order,
         talent_next=_talent_for_level(build.talents, ctx.state.hero.level or 0),
         situational=situational,
+        herald_winrate=herald_wr,
     )

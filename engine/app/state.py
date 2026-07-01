@@ -7,6 +7,18 @@ class MapState(BaseModel):
     daytime: bool | None = None
 
 
+class AbilityState(BaseModel):
+    name: str | None = None
+    level: int | None = None
+    can_cast: bool | None = None
+    passive: bool | None = None
+    ability_active: bool | None = None
+    cooldown: int | None = None
+    ultimate: bool = False
+    charges: int | None = None
+    max_charges: int | None = None
+
+
 class HeroState(BaseModel):
     name: str | None = None
     level: int | None = None
@@ -14,6 +26,9 @@ class HeroState(BaseModel):
     buyback_cost: int | None = None
     buyback_cooldown: int | None = None
     respawn_seconds: int | None = None
+    aghanims_scepter: bool | None = None
+    aghanims_shard: bool | None = None
+    abilities: list[AbilityState] = Field(default_factory=list)
 
 
 class PlayerState(BaseModel):

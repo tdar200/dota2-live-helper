@@ -1,4 +1,13 @@
-import { itemImg } from "./icons.js";
+import { itemImg, heroImg } from "./icons.js";
+
+// Herald (bracket 1) win% badge for the build-tile header. Quietly empty when
+// the hero-meta cache is absent (herald_winrate null) — graceful degradation.
+function heraldBadge(b) {
+  if (b.herald_winrate == null) return "";
+  const pct = (b.herald_winrate * 100).toFixed(1);
+  const cls = b.herald_winrate >= 0.5 ? "wr-good" : "wr-bad";
+  return ` <span class="herald-wr ${cls}" title="Herald pub win rate (OpenDota)">${pct}% Herald</span>`;
+}
 
 export function renderBuild(payload) {
   const el = document.getElementById("build-body");
@@ -29,7 +38,7 @@ export function renderBuild(payload) {
     const nextDisplay = b.suggested_next ? b.suggested_next.display : "build complete";
     const nextIcon = b.suggested_next ? itemImg(b.suggested_next.item) : "";
     el.innerHTML = `
-    <div class="hero">${b.hero_display || b.hero}</div>
+    <div class="hero">${heroImg(b.hero)}<span class="hname">${b.hero_display || b.hero}</span>${heraldBadge(b)}</div>
     <div class="next">NEXT: ${nextIcon}<strong>${nextDisplay}</strong></div>
     <div class="coreline">${seqHtml}</div>
     <div class="build-meta">(vs all-bracket meta)</div>`;
@@ -48,7 +57,7 @@ export function renderBuild(payload) {
     })
     .join("");
   el.innerHTML = `
-    <div class="hero">${b.hero_display}</div>
+    <div class="hero">${heroImg(b.hero)}<span class="hname">${b.hero_display}</span>${heraldBadge(b)}</div>
     <div class="next">NEXT: ${b.next_core ? itemImg(b.next_core.item) : ""}<strong>${b.next_core ? b.next_core.display : "build complete"}</strong></div>
     <div class="coreline">${core}</div>
     <div class="skill">Skill: ${b.skill_next || ""}</div>

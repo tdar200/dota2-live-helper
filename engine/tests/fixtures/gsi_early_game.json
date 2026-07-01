@@ -27,8 +27,18 @@
     "respawn_seconds": 0,
     "buyback_cost": 300,
     "buyback_cooldown": 0,
+    "aghanims_scepter": 0,
+    "aghanims_shard": 1,
     "health": 820, "max_health": 820,
     "mana": 300, "max_mana": 300
+  },
+  "abilities": {
+    "ability0": {"name": "sniper_shrapnel", "level": 1, "can_cast": true, "passive": false, "ability_active": true, "cooldown": 0, "ultimate": false, "charges": 3, "max_charges": 3},
+    "ability1": {"name": "sniper_headshot", "level": 1, "can_cast": false, "passive": true, "ability_active": true, "cooldown": 0, "ultimate": false},
+    "ability2": {"name": "sniper_take_aim", "level": 1, "can_cast": false, "passive": true, "ability_active": true, "cooldown": 0, "ultimate": false},
+    "ability3": {"name": "sniper_assassinate", "level": 1, "can_cast": true, "passive": false, "ability_active": true, "cooldown": 0, "ultimate": true},
+    "ability4": {"name": "special_bonus_attack_speed_30", "level": 1, "can_cast": false, "passive": true, "ability_active": true, "cooldown": 0, "ultimate": false},
+    "ability5": {"name": "generic_hidden", "level": 0}
   },
   "items": {
     "slot0": {"name": "item_phase_boots", "purchaser": 0},

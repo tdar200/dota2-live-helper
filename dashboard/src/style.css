@@ -42,6 +42,7 @@ body {
 /* ── Header / status / clock ─────────────────────────────────────────────── */
 header {
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   align-items: center;
   padding: .4rem .9rem;
@@ -312,6 +313,18 @@ ul.situational { list-style: none; margin: .4rem 0 0; padding: 0; }
 }
 .phase-div { color: var(--edge); }
 .build-meta { font-size: .68rem; color: var(--ash); margin-top: .2rem; }
+.herald-wr {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: .62rem;
+  letter-spacing: .02em;
+  padding: .04rem .3rem;
+  border-radius: 3px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.herald-wr.wr-good { color: #7bd88f; border: 1px solid rgba(123, 216, 143, .35); }
+.herald-wr.wr-bad  { color: #e5915f; border: 1px solid rgba(229, 145, 95, .35); }
 
 /* ── Draft ranking ───────────────────────────────────────────────────────── */
 .draft-note { font-family: var(--font-body); font-size: .78rem; color: var(--gold); margin-bottom: .45rem; }
@@ -394,8 +407,8 @@ ol.picks { list-style: none; margin: 0; padding: 0; }
   text-transform: uppercase;
   margin: .2rem 0 .35rem;
   color: var(--ash);
-  animation: call-punch .18s ease;
 }
+#macro-rec.punch { animation: call-punch .18s ease; }
 #macro-rec::before { content: "▸ "; }
 .rec-PUSH, .rec-TAKE_ROSH { color: var(--radiant); }
 .rec-DEFEND, .rec-PLAY_SAFE { color: var(--dire); }
@@ -613,6 +626,60 @@ select:focus-visible,
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
 }
+
+/* ── Header ability strip: ult/cooldown pips + aghs pills ────────────────── */
+/* Pills are .68rem — shorter than the clock line-box, so no vertical growth. */
+#ability-strip {
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+}
+#ability-strip:empty { display: none; }
+.abil-pip, .aghs-pill {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  padding: .18rem .32rem;
+  border-radius: 4px;
+  background: var(--slate-hi);
+  border: 1px solid var(--edge);
+  color: var(--ash);
+  white-space: nowrap;
+}
+.abil-pip.cd { color: var(--frost); border-color: color-mix(in srgb, var(--frost) 30%, var(--edge)); }
+.abil-pip.ready { color: var(--radiant); border-color: color-mix(in srgb, var(--radiant) 35%, var(--edge)); }
+.abil-pip.ult { font-weight: 700; letter-spacing: .04em; }
+.abil-pip.ult.ready {
+  color: var(--gold);
+  border-color: var(--gold);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--gold) 55%, transparent);
+}
+.aghs-pill.on { color: var(--gold); border-color: color-mix(in srgb, var(--gold) 45%, var(--edge)); }
+.aghs-pill.off { color: var(--inert); }
+
+/* ── Mute toggle + objective tile flash ──────────────────────────────────── */
+#mute-btn {
+  font-size: .95rem;
+  line-height: 1;
+  padding: .2rem .4rem;
+  background: var(--slate-hi);
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  color: var(--bone);
+  cursor: pointer;
+}
+#mute-btn[aria-pressed="true"] { color: var(--dire); border-color: color-mix(in srgb, var(--dire) 45%, var(--edge)); }
+@keyframes tile-flash {
+  0%   { background: color-mix(in srgb, var(--gold) 28%, transparent); }
+  100% { background: transparent; }
+}
+#timings-panel.flash { animation: tile-flash .9s ease-out; }
+
+/* ── Build-tile hero line: portrait + name + herald win% (flex row) ──────── */
+#build-panel .hero { display: flex; align-items: center; gap: .4rem; }
+#build-panel .hero .i-hero { width: 34px; height: 20px; }
+.hname { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* ── Narrow screens: single-column collapse (verbatim behaviour) ─────────── */
 @media (max-width: 1000px) {

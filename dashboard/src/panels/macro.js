@@ -16,8 +16,17 @@ export function renderMacro(payload) {
     panel.dataset.winBand = "none";
     return;
   }
-  rec.textContent = m.recommendation.replace(/_/g, " ");
-  rec.className = `rec-${m.recommendation}`;
+  const newText = m.recommendation.replace(/_/g, " ");
+  if (rec.textContent !== newText) {
+    rec.textContent = newText;
+    rec.className = "rec-" + m.recommendation;
+    rec.classList.remove("punch");
+    void rec.offsetWidth; // reflow to restart the animation
+    rec.classList.add("punch");
+  } else {
+    rec.textContent = newText;
+    rec.className = "rec-" + m.recommendation;
+  }
   if (m.win_prob == null) {
     fill.style.width = "0%";
     pct.textContent = "—";

@@ -6,6 +6,8 @@ import { renderDraft } from "./panels/draft.js";
 import { initAllies } from "./panels/allies.js";
 import { renderMacro, initMacroControls } from "./panels/macro.js";
 import { renderFarm } from "./panels/farm.js";
+import { renderAbilities } from "./panels/abilities.js";
+import { initAlerts, renderAlerts } from "./panels/alerts.js";
 import { renderReview, populateReviews } from "./panels/review.js";
 
 // Single-process: engine serves this page (same host:port). Vite dev (5173) -> engine :3000.
@@ -25,11 +27,14 @@ function onMessage(payload) {
   renderDraft(payload);
   renderMacro(payload);
   renderFarm(payload);
+  renderAbilities(payload);
+  renderAlerts(payload);
 }
 
 initEnemies(ENGINE_HOST);
 initAllies(ENGINE_HOST);
 initMacroControls(ENGINE_HOST);
+initAlerts();
 
 const base = `http://${ENGINE_HOST}`;
 const liveView = document.getElementById("live-view");
