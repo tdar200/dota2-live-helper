@@ -36,6 +36,18 @@
         <h2>Draft — pick ranking</h2>
         <div id="draft-body"><em>enter the enemy lineup…</em></div>
       </section>
+      <section id="macro-panel" class="panel">
+        <h2>Macro</h2>
+        <div class="winbar"><div id="win-fill"></div><span id="win-pct">—</span></div>
+        <label class="nwl">Net-worth lead
+          <input id="nwl-input" type="number" step="500" placeholder="e.g. 4000" />
+        </label>
+        <div id="macro-rec">—</div>
+        <ul id="macro-reasons"></ul>
+        <button id="rosh-btn" type="button">Rosh died</button>
+        <button id="rosh-clear" type="button">clear</button>
+        <span id="rosh-info"></span>
+      </section>
     </main>
     <script type="module" src="/src/main.js"></script>
   </body>
