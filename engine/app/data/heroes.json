@@ -1,509 +1,636 @@
 [
   {
+    "id": 1,
     "key": "npc_dota_hero_antimage",
     "display": "Anti-Mage"
   },
   {
+    "id": 2,
     "key": "npc_dota_hero_axe",
     "display": "Axe"
   },
   {
+    "id": 3,
     "key": "npc_dota_hero_bane",
     "display": "Bane"
   },
   {
+    "id": 4,
     "key": "npc_dota_hero_bloodseeker",
     "display": "Bloodseeker"
   },
   {
+    "id": 5,
     "key": "npc_dota_hero_crystal_maiden",
     "display": "Crystal Maiden"
   },
   {
+    "id": 6,
     "key": "npc_dota_hero_drow_ranger",
     "display": "Drow Ranger"
   },
   {
+    "id": 7,
     "key": "npc_dota_hero_earthshaker",
     "display": "Earthshaker"
   },
   {
+    "id": 8,
     "key": "npc_dota_hero_juggernaut",
     "display": "Juggernaut"
   },
   {
+    "id": 9,
     "key": "npc_dota_hero_mirana",
     "display": "Mirana"
   },
   {
+    "id": 10,
     "key": "npc_dota_hero_morphling",
     "display": "Morphling"
   },
   {
+    "id": 11,
     "key": "npc_dota_hero_nevermore",
     "display": "Shadow Fiend"
   },
   {
+    "id": 12,
     "key": "npc_dota_hero_phantom_lancer",
     "display": "Phantom Lancer"
   },
   {
+    "id": 13,
     "key": "npc_dota_hero_puck",
     "display": "Puck"
   },
   {
+    "id": 14,
     "key": "npc_dota_hero_pudge",
     "display": "Pudge"
   },
   {
+    "id": 15,
     "key": "npc_dota_hero_razor",
     "display": "Razor"
   },
   {
+    "id": 16,
     "key": "npc_dota_hero_sand_king",
     "display": "Sand King"
   },
   {
+    "id": 17,
     "key": "npc_dota_hero_storm_spirit",
     "display": "Storm Spirit"
   },
   {
+    "id": 18,
     "key": "npc_dota_hero_sven",
     "display": "Sven"
   },
   {
+    "id": 19,
     "key": "npc_dota_hero_tiny",
     "display": "Tiny"
   },
   {
+    "id": 20,
     "key": "npc_dota_hero_vengefulspirit",
     "display": "Vengeful Spirit"
   },
   {
+    "id": 21,
     "key": "npc_dota_hero_windrunner",
     "display": "Windranger"
   },
   {
+    "id": 22,
     "key": "npc_dota_hero_zuus",
     "display": "Zeus"
   },
   {
+    "id": 23,
     "key": "npc_dota_hero_kunkka",
     "display": "Kunkka"
   },
   {
+    "id": 25,
     "key": "npc_dota_hero_lina",
     "display": "Lina"
   },
   {
+    "id": 26,
     "key": "npc_dota_hero_lion",
     "display": "Lion"
   },
   {
+    "id": 27,
     "key": "npc_dota_hero_shadow_shaman",
     "display": "Shadow Shaman"
   },
   {
+    "id": 28,
     "key": "npc_dota_hero_slardar",
     "display": "Slardar"
   },
   {
+    "id": 29,
     "key": "npc_dota_hero_tidehunter",
     "display": "Tidehunter"
   },
   {
+    "id": 30,
     "key": "npc_dota_hero_witch_doctor",
     "display": "Witch Doctor"
   },
   {
+    "id": 31,
     "key": "npc_dota_hero_lich",
     "display": "Lich"
   },
   {
+    "id": 32,
     "key": "npc_dota_hero_riki",
     "display": "Riki"
   },
   {
+    "id": 33,
     "key": "npc_dota_hero_enigma",
     "display": "Enigma"
   },
   {
+    "id": 34,
     "key": "npc_dota_hero_tinker",
     "display": "Tinker"
   },
   {
+    "id": 35,
     "key": "npc_dota_hero_sniper",
     "display": "Sniper"
   },
   {
+    "id": 36,
     "key": "npc_dota_hero_necrolyte",
     "display": "Necrophos"
   },
   {
+    "id": 37,
     "key": "npc_dota_hero_warlock",
     "display": "Warlock"
   },
   {
+    "id": 38,
     "key": "npc_dota_hero_beastmaster",
     "display": "Beastmaster"
   },
   {
+    "id": 39,
     "key": "npc_dota_hero_queenofpain",
     "display": "Queen of Pain"
   },
   {
+    "id": 40,
     "key": "npc_dota_hero_venomancer",
     "display": "Venomancer"
   },
   {
+    "id": 41,
     "key": "npc_dota_hero_faceless_void",
     "display": "Faceless Void"
   },
   {
+    "id": 42,
     "key": "npc_dota_hero_skeleton_king",
     "display": "Wraith King"
   },
   {
+    "id": 43,
     "key": "npc_dota_hero_death_prophet",
     "display": "Death Prophet"
   },
   {
+    "id": 44,
     "key": "npc_dota_hero_phantom_assassin",
     "display": "Phantom Assassin"
   },
   {
+    "id": 45,
     "key": "npc_dota_hero_pugna",
     "display": "Pugna"
   },
   {
+    "id": 46,
     "key": "npc_dota_hero_templar_assassin",
     "display": "Templar Assassin"
   },
   {
+    "id": 47,
     "key": "npc_dota_hero_viper",
     "display": "Viper"
   },
   {
+    "id": 48,
     "key": "npc_dota_hero_luna",
     "display": "Luna"
   },
   {
+    "id": 49,
     "key": "npc_dota_hero_dragon_knight",
     "display": "Dragon Knight"
   },
   {
+    "id": 50,
     "key": "npc_dota_hero_dazzle",
     "display": "Dazzle"
   },
   {
+    "id": 51,
     "key": "npc_dota_hero_rattletrap",
     "display": "Clockwerk"
   },
   {
+    "id": 52,
     "key": "npc_dota_hero_leshrac",
     "display": "Leshrac"
   },
   {
+    "id": 53,
     "key": "npc_dota_hero_furion",
     "display": "Nature's Prophet"
   },
   {
+    "id": 54,
     "key": "npc_dota_hero_life_stealer",
     "display": "Lifestealer"
   },
   {
+    "id": 55,
     "key": "npc_dota_hero_dark_seer",
     "display": "Dark Seer"
   },
   {
+    "id": 56,
     "key": "npc_dota_hero_clinkz",
     "display": "Clinkz"
   },
   {
+    "id": 57,
     "key": "npc_dota_hero_omniknight",
     "display": "Omniknight"
   },
   {
+    "id": 58,
     "key": "npc_dota_hero_enchantress",
     "display": "Enchantress"
   },
   {
+    "id": 59,
     "key": "npc_dota_hero_huskar",
     "display": "Huskar"
   },
   {
+    "id": 60,
     "key": "npc_dota_hero_night_stalker",
     "display": "Night Stalker"
   },
   {
+    "id": 61,
     "key": "npc_dota_hero_broodmother",
     "display": "Broodmother"
   },
   {
+    "id": 62,
     "key": "npc_dota_hero_bounty_hunter",
     "display": "Bounty Hunter"
   },
   {
+    "id": 63,
     "key": "npc_dota_hero_weaver",
     "display": "Weaver"
   },
   {
+    "id": 64,
     "key": "npc_dota_hero_jakiro",
     "display": "Jakiro"
   },
   {
+    "id": 65,
     "key": "npc_dota_hero_batrider",
     "display": "Batrider"
   },
   {
+    "id": 66,
     "key": "npc_dota_hero_chen",
     "display": "Chen"
   },
   {
+    "id": 67,
     "key": "npc_dota_hero_spectre",
     "display": "Spectre"
   },
   {
+    "id": 68,
     "key": "npc_dota_hero_ancient_apparition",
     "display": "Ancient Apparition"
   },
   {
+    "id": 69,
     "key": "npc_dota_hero_doom_bringer",
     "display": "Doom"
   },
   {
+    "id": 70,
     "key": "npc_dota_hero_ursa",
     "display": "Ursa"
   },
   {
+    "id": 71,
     "key": "npc_dota_hero_spirit_breaker",
     "display": "Spirit Breaker"
   },
   {
+    "id": 72,
     "key": "npc_dota_hero_gyrocopter",
     "display": "Gyrocopter"
   },
   {
+    "id": 73,
     "key": "npc_dota_hero_alchemist",
     "display": "Alchemist"
   },
   {
+    "id": 74,
     "key": "npc_dota_hero_invoker",
     "display": "Invoker"
   },
   {
+    "id": 75,
     "key": "npc_dota_hero_silencer",
     "display": "Silencer"
   },
   {
+    "id": 76,
     "key": "npc_dota_hero_obsidian_destroyer",
     "display": "Outworld Devourer"
   },
   {
+    "id": 77,
     "key": "npc_dota_hero_lycan",
     "display": "Lycan"
   },
   {
+    "id": 78,
     "key": "npc_dota_hero_brewmaster",
     "display": "Brewmaster"
   },
   {
+    "id": 79,
     "key": "npc_dota_hero_shadow_demon",
     "display": "Shadow Demon"
   },
   {
+    "id": 80,
     "key": "npc_dota_hero_lone_druid",
     "display": "Lone Druid"
   },
   {
+    "id": 81,
     "key": "npc_dota_hero_chaos_knight",
     "display": "Chaos Knight"
   },
   {
+    "id": 82,
     "key": "npc_dota_hero_meepo",
     "display": "Meepo"
   },
   {
+    "id": 83,
     "key": "npc_dota_hero_treant",
     "display": "Treant Protector"
   },
   {
+    "id": 84,
     "key": "npc_dota_hero_ogre_magi",
     "display": "Ogre Magi"
   },
   {
+    "id": 85,
     "key": "npc_dota_hero_undying",
     "display": "Undying"
   },
   {
+    "id": 86,
     "key": "npc_dota_hero_rubick",
     "display": "Rubick"
   },
   {
+    "id": 87,
     "key": "npc_dota_hero_disruptor",
     "display": "Disruptor"
   },
   {
+    "id": 88,
     "key": "npc_dota_hero_nyx_assassin",
     "display": "Nyx Assassin"
   },
   {
+    "id": 89,
     "key": "npc_dota_hero_naga_siren",
     "display": "Naga Siren"
   },
   {
+    "id": 90,
     "key": "npc_dota_hero_keeper_of_the_light",
     "display": "Keeper of the Light"
   },
   {
+    "id": 91,
     "key": "npc_dota_hero_wisp",
     "display": "Io"
   },
   {
+    "id": 92,
     "key": "npc_dota_hero_visage",
     "display": "Visage"
   },
   {
+    "id": 93,
     "key": "npc_dota_hero_slark",
     "display": "Slark"
   },
   {
+    "id": 94,
     "key": "npc_dota_hero_medusa",
     "display": "Medusa"
   },
   {
+    "id": 95,
     "key": "npc_dota_hero_troll_warlord",
     "display": "Troll Warlord"
   },
   {
+    "id": 96,
     "key": "npc_dota_hero_centaur",
     "display": "Centaur Warrunner"
   },
   {
+    "id": 97,
     "key": "npc_dota_hero_magnataur",
     "display": "Magnus"
   },
   {
+    "id": 98,
     "key": "npc_dota_hero_shredder",
     "display": "Timbersaw"
   },
   {
+    "id": 99,
     "key": "npc_dota_hero_bristleback",
     "display": "Bristleback"
   },
   {
+    "id": 100,
     "key": "npc_dota_hero_tusk",
     "display": "Tusk"
   },
   {
+    "id": 101,
     "key": "npc_dota_hero_skywrath_mage",
     "display": "Skywrath Mage"
   },
   {
+    "id": 102,
     "key": "npc_dota_hero_abaddon",
     "display": "Abaddon"
   },
   {
+    "id": 103,
     "key": "npc_dota_hero_elder_titan",
     "display": "Elder Titan"
   },
   {
+    "id": 104,
     "key": "npc_dota_hero_legion_commander",
     "display": "Legion Commander"
   },
   {
+    "id": 105,
     "key": "npc_dota_hero_techies",
     "display": "Techies"
   },
   {
+    "id": 106,
     "key": "npc_dota_hero_ember_spirit",
     "display": "Ember Spirit"
   },
   {
+    "id": 107,
     "key": "npc_dota_hero_earth_spirit",
     "display": "Earth Spirit"
   },
   {
+    "id": 108,
     "key": "npc_dota_hero_abyssal_underlord",
     "display": "Underlord"
   },
   {
+    "id": 109,
     "key": "npc_dota_hero_terrorblade",
     "display": "Terrorblade"
   },
   {
+    "id": 110,
     "key": "npc_dota_hero_phoenix",
     "display": "Phoenix"
   },
   {
+    "id": 111,
     "key": "npc_dota_hero_oracle",
     "display": "Oracle"
   },
   {
+    "id": 112,
     "key": "npc_dota_hero_winter_wyvern",
     "display": "Winter Wyvern"
   },
   {
+    "id": 113,
     "key": "npc_dota_hero_arc_warden",
     "display": "Arc Warden"
   },
   {
+    "id": 114,
     "key": "npc_dota_hero_monkey_king",
     "display": "Monkey King"
   },
   {
+    "id": 119,
     "key": "npc_dota_hero_dark_willow",
     "display": "Dark Willow"
   },
   {
+    "id": 120,
     "key": "npc_dota_hero_pangolier",
     "display": "Pangolier"
   },
   {
+    "id": 121,
     "key": "npc_dota_hero_grimstroke",
     "display": "Grimstroke"
   },
   {
+    "id": 123,
     "key": "npc_dota_hero_hoodwink",
     "display": "Hoodwink"
   },
   {
+    "id": 126,
     "key": "npc_dota_hero_void_spirit",
     "display": "Void Spirit"
   },
   {
+    "id": 128,
     "key": "npc_dota_hero_snapfire",
     "display": "Snapfire"
   },
   {
+    "id": 129,
     "key": "npc_dota_hero_mars",
     "display": "Mars"
   },
   {
+    "id": 131,
     "key": "npc_dota_hero_ringmaster",
     "display": "Ring Master"
   },
   {
+    "id": 135,
     "key": "npc_dota_hero_dawnbreaker",
     "display": "Dawnbreaker"
   },
   {
+    "id": 136,
     "key": "npc_dota_hero_marci",
     "display": "Marci"
   },
   {
+    "id": 137,
     "key": "npc_dota_hero_primal_beast",
     "display": "Primal Beast"
   },
   {
+    "id": 138,
     "key": "npc_dota_hero_muerta",
     "display": "Muerta"
   },
   {
+    "id": 145,
     "key": "npc_dota_hero_kez",
     "display": "Kez"
   },
   {
+    "id": 155,
     "key": "npc_dota_hero_largo",
     "display": "Largo"
   }
