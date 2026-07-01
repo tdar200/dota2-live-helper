@@ -29,3 +29,15 @@ ul.situational { list-style: none; margin: .4rem 0 0; padding: 0; }
 .sit { padding: .2rem 0; color: #6b7280; }
 .sit.on { color: #ffd479; }
 .sit .why { color: #8a93a0; font-size: .8rem; }
+#ally-chips { display: flex; flex-wrap: wrap; gap: .3rem; margin-bottom: .4rem; }
+.chip.ally { background: #16331c; color: #9ee7a0; }
+#ally-search { width: 100%; box-sizing: border-box; background: #0b0d11; color: #e6e6e6; border: 1px solid #20242c; border-radius: 6px; padding: .4rem; }
+.draft-note { font-size: .8rem; color: #ffd479; margin-bottom: .4rem; }
+ol.picks { list-style: none; margin: 0; padding: 0; }
+.pick { display: flex; flex-wrap: wrap; align-items: baseline; gap: .4rem; padding: .25rem 0; border-bottom: 1px solid #20242c; }
+.pick.best { background: #14251a; }
+.pick .rank { color: #6b7280; }
+.pick .pname { font-weight: 600; }
+.pick .pscore { color: #9ee7a0; margin-left: auto; font-variant-numeric: tabular-nums; }
+.pick .pwhy { flex-basis: 100%; font-size: .8rem; color: #8a93a0; }
+.countered { color: #ff9a9a; font-size: .8rem; }

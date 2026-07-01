@@ -12,3 +12,5 @@ class AdviceContext:
     trait_db: dict = field(default_factory=dict)
     item_names: dict = field(default_factory=dict)
     hero_names: dict = field(default_factory=dict)
+    ally_heroes: list[str] = field(default_factory=list)
+    matchup_data: object | None = None

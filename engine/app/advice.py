@@ -4,10 +4,14 @@ from app.modules.timings import TimingHit
 from app.advisors.context import AdviceContext
 from app.advisors import timings as timings_advisor
 from app.advisors import build_coach
+from app.advisors import draft as draft_advisor
 from app.advisors.build_coach import BuildAdvice
+from app.advisors.draft import DraftAdvice
 from app.build_data import load_build_data
+from app.matchups import load_matchups
 
 BUILD_DATA = load_build_data()
+MATCHUP_DATA = load_matchups()
 
 
 class AdvicePayload(BaseModel):
@@ -15,19 +19,23 @@ class AdvicePayload(BaseModel):
     connected: bool = True
     timings: list[TimingHit] = Field(default_factory=list)
     build: BuildAdvice | None = None
+    draft: DraftAdvice | None = None
 
 
 def build_advice(state: GameState, *, horizon_s: int = 600, limit: int = 6) -> AdvicePayload:
     ctx = AdviceContext(
         state=state, horizon_s=horizon_s, limit=limit,
         enemy_heroes=state.enemy_heroes,
+        ally_heroes=state.ally_heroes,
         build_db=BUILD_DATA.builds,
         trait_db=BUILD_DATA.traits,
         item_names=BUILD_DATA.item_names,
         hero_names=BUILD_DATA.hero_names,
+        matchup_data=MATCHUP_DATA,
     )
     return AdvicePayload(
         clock_time=state.clock_time,
         timings=timings_advisor.advise(ctx),
         build=build_coach.advise(ctx),
+        draft=draft_advisor.advise(ctx),
     )
