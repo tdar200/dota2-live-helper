@@ -19,6 +19,8 @@ def test_load_build_data_parses_and_validates():
 
     # trait map references real heroes and valid traits
     keys = {h["key"] for h in data.heroes}
+    for hero_key in data.builds:
+        assert hero_key in keys, f"build hero key not in heroes.json: {hero_key}"
     for ehero, traits in data.traits.items():
         assert ehero in keys, f"unknown enemy hero {ehero}"
         for t in traits:

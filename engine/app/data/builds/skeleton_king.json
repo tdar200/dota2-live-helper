@@ -6,7 +6,7 @@
   "skill_order": "Max Wraithfire Blast (Q); value Vampiric Spirit (E); Reincarnation at 6/12/18",
   "talents": {"10": "+8 Strength", "15": "+30 Movement Speed", "20": "+90 Skeleton Charge Damage", "25": "+2 Skeletons per Death"},
   "starting_items": ["item_tango", "item_quelling_blade", "item_gauntlets", "item_circlet"],
-  "core_items": ["item_power_treads", "item_armlet", "item_radiance", "item_assault", "item_abyssal"],
+  "core_items": ["item_power_treads", "item_armlet", "item_radiance", "item_assault", "item_abyssal_blade"],
   "situational": [
     {"item": "item_black_king_bar", "trait": "heavy_magic", "note": "vs heavy magic burst"},
     {"item": "item_monkey_king_bar", "trait": "evasion", "note": "vs evasion"},

@@ -6,7 +6,7 @@
   "skill_order": "1 Blade Fury (Q) early; Max Blade Dance (E) passive crit; then Max Blade Fury; Omnislash at 6/12/18",
   "talents": {"10": "+Blade Fury Attack Speed", "15": "+Blade Dance Critical Damage", "20": "+Omnislash Duration", "25": "+Omnislash Illusion"},
   "starting_items": ["item_tango", "item_quelling_blade", "item_slippers", "item_branches"],
-  "core_items": ["item_phase_boots", "item_bfury", "item_manta", "item_black_king_bar", "item_abyssal"],
+  "core_items": ["item_phase_boots", "item_bfury", "item_manta", "item_black_king_bar", "item_abyssal_blade"],
   "situational": [
     {"item": "item_monkey_king_bar", "trait": "evasion", "note": "vs Phantom Assassin / Windrunner evasion counters Omnislash"},
     {"item": "item_diffusal_blade", "trait": "illusions_summons", "note": "purge enemy illusions and mana-burn summons quickly"},

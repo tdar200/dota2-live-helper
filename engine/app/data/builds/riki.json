@@ -9,7 +9,7 @@
   "core_items": ["item_power_treads", "item_diffusal_blade", "item_butterfly", "item_greater_crit", "item_skadi"],
   "situational": [
     {"item": "item_black_king_bar", "trait": "heavy_magic", "note": "vs heavy magic / silence that stops the gank"},
-    {"item": "item_abyssal", "trait": "lockdown_silence", "note": "bash locks target for prolonged backstab burst"},
-    {"item": "item_nullifier", "trait": "evasion", "note": "pierce Ghost Scepter / Eul saves that deny backstab position"}
+    {"item": "item_abyssal_blade", "trait": "lockdown_silence", "note": "bash locks target for prolonged backstab burst"},
+    {"item": "item_nullifier", "trait": "tanky_hp", "note": "dispel Ghost Scepter / Eul saves; strip defensive items"}
   ]
 }
