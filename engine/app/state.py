@@ -20,6 +20,7 @@ class PlayerState(BaseModel):
     gold: int | None = None
     gpm: int | None = None
     xpm: int | None = None
+    last_hits: int | None = None
 
 
 class GameState(BaseModel):
