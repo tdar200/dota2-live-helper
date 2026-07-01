@@ -59,5 +59,21 @@ async def heroes() -> list[dict]:
     return BUILD_DATA.heroes
 
 
+@app.post("/networth")
+async def networth(request: Request) -> dict:
+    body = await request.json()
+    STATE.net_worth_lead = body.get("lead")
+    await HUB.broadcast(build_advice(STATE).model_dump())
+    return {"ok": True, "lead": STATE.net_worth_lead}
+
+
+@app.post("/roshan")
+async def roshan(request: Request) -> dict:
+    body = await request.json()
+    STATE.roshan_dead_clock = None if body.get("clear") else STATE.clock_time
+    await HUB.broadcast(build_advice(STATE).model_dump())
+    return {"ok": True, "roshan_dead_clock": STATE.roshan_dead_clock}
+
+
 if _DIST.exists():
     app.mount("/", StaticFiles(directory=str(_DIST), html=True), name="dashboard")
