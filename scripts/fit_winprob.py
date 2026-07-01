@@ -42,7 +42,7 @@ def fetch_json(url: str):
 def main() -> None:
     try:
         pro = fetch_json(f"{API}/proMatches")
-    except urllib.error.URLError as e:
+    except (urllib.error.URLError, json.JSONDecodeError) as e:
         print(f"ERROR: could not reach OpenDota: {e}", file=sys.stderr)
         sys.exit(1)
     ids = [m["match_id"] for m in pro][:MATCH_LIMIT]
@@ -51,7 +51,7 @@ def main() -> None:
     for mid in ids:
         try:
             m = fetch_json(f"{API}/matches/{mid}")
-        except urllib.error.URLError:
+        except (urllib.error.URLError, json.JSONDecodeError):
             continue
         adv = m.get("radiant_gold_adv")
         win = m.get("radiant_win")
