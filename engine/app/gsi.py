@@ -33,6 +33,7 @@ def parse_gsi(raw: dict) -> GameState:
             gold=p.get("gold"),
             gpm=p.get("gpm"),
             xpm=p.get("xpm"),
+            last_hits=p.get("last_hits"),
         ),
         items=items,
     )

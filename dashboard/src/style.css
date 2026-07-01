@@ -115,6 +115,24 @@ main { flex: 1; min-height: 0; display: flex; flex-direction: column; padding: 0
 #review-view { flex: 1; min-height: 0; padding: .5rem; box-sizing: border-box; display: flex; }
 #review-view .panel { flex: 1; min-height: 0; overflow: auto; background: #0e1218; border: 1px solid #1c2129; border-radius: 8px; }
 
+/* ── Farm benchmark bars (folded inside macro tile) ──────────────────────── */
+#farm-body { margin-top: .4rem; }
+.farm-row { display: flex; align-items: center; gap: .35rem; margin: .18rem 0; }
+.farm-label { font-size: .72rem; color: #8a93a0; width: 3rem; flex-shrink: 0; }
+.farm-track { flex: 1; height: 9px; background: #1c2129; border-radius: 999px; overflow: hidden; }
+.farm-fill { height: 100%; background: linear-gradient(90deg, #2f6b3a, #6ee787); transition: width .3s; }
+.farm-band { font-size: .7rem; width: 5rem; text-align: right; flex-shrink: 0; }
+.farm-band-behind { color: #ff9a9a; }
+.farm-band-on-track { color: #9ecbff; }
+.farm-band-ahead { color: #6ee787; }
+.farm-band-dominating { color: #ffd479; }
+.farm-summary { font-size: .7rem; color: #7d8795; margin-top: .2rem; }
+
+/* ── OpenDota fallback build — phase labels / dividers ───────────────────── */
+.phase-label { font-size: .68rem; color: #7d8795; letter-spacing: .05em; text-transform: uppercase; }
+.phase-div { font-size: .75rem; color: #444c58; }
+.build-meta { font-size: .68rem; color: #7d8795; margin-top: .15rem; }
+
 /* narrow screens (phone/tablet): stack and allow normal scrolling */
 @media (max-width: 1000px) {
   body { overflow: auto; }

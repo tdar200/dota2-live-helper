@@ -17,3 +17,4 @@ class AdviceContext:
     net_worth_lead: int | None = None
     roshan_dead_clock: int | None = None
     winprob_table: object | None = None
+    item_build_db: dict = field(default_factory=dict)
