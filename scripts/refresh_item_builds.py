@@ -58,20 +58,33 @@ PHASE_MAP: dict[str, str] = {
 # Pure transform functions (unit-tested — NO network, NO I/O)
 # ---------------------------------------------------------------------------
 
+def component_part_keys(items: dict) -> set[str]:
+    """Every item key that appears inside some other item's `components` list (i.e. is used as a buildup part)."""
+    parts: set[str] = set()
+    for meta in items.values():
+        for comp in (meta.get("components") or []):
+            parts.add(comp)
+    return parts
+
+
 def resolve_item(
     numeric_id: int,
     item_ids: dict[str, str],
     items: dict[str, dict],
+    part_keys: set[str],
 ) -> dict | None:
     """Resolve a numeric item id to a cache-ready dict, or None if it should
     be dropped.
 
-    Drops when:
+    Drops when (in order):
     - numeric_id not found in item_ids (str key lookup)
     - name not found in items constants
     - meta["dname"] is None (recipes / tokens)
-    - meta.get("qual") in {"component", "consumable"}
     - name in CONSUMABLE_BLOCKLIST (wards, scrolls, stat branches, etc.)
+    - meta.get("qual") == "consumable" (salve/clarity/etc.)
+    - meta.get("components") is None AND name in part_keys  (structural rule:
+      atomic buildup part — catches secret_shop/rare raw-stat sticks while
+      keeping Blink Dagger which is atomic but used as part of nothing)
 
     Returns:
         {"id": int, "key": "item_<name>", "display": str}  on success
@@ -89,10 +102,13 @@ def resolve_item(
     if dname is None:
         return None
 
-    if meta.get("qual") in {"component", "consumable"}:
+    if name in CONSUMABLE_BLOCKLIST:
         return None
 
-    if name in CONSUMABLE_BLOCKLIST:
+    if meta.get("qual") == "consumable":
+        return None
+
+    if meta.get("components") is None and name in part_keys:
         return None
 
     return {
@@ -128,6 +144,7 @@ def transform_item_popularity(
     Returns:
         dict keyed by "start_game", "early_game", "mid_game", "late_game"
     """
+    part_keys = component_part_keys(items)
     phase_order = [
         "start_game_items",
         "early_game_items",
@@ -153,7 +170,7 @@ def transform_item_popularity(
         for numeric_id, count in sorted_ids:
             if len(phase_items) >= top_n:
                 break
-            resolved = resolve_item(numeric_id, item_ids, items)
+            resolved = resolve_item(numeric_id, item_ids, items, part_keys)
             if resolved is None:
                 continue
             item_key = resolved["key"]

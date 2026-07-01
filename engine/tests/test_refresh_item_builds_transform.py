@@ -10,6 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
 from refresh_item_builds import (
     CONSUMABLE_BLOCKLIST,
     PHASE_MAP,
+    component_part_keys,
     resolve_item,
     transform_item_popularity,
     transform_benchmarks,
@@ -33,15 +34,22 @@ ITEM_IDS = {
 }
 
 # items: short_name -> metadata
+# `components` lists wire up the structural filter: component_part_keys()
+# collects every name that appears in some item's components list.
+# Assembled items (have components) are NEVER dropped by the structural rule.
+# Atomic items (no components) that ARE in part_keys are dropped.
 ITEMS = {
-    "bfury":         {"dname": "Battle Fury",     "qual": "artifact"},
-    "power_treads":  {"dname": "Power Treads",    "qual": "common"},
-    "manta":         {"dname": "Manta Style",     "qual": "artifact"},
-    "quelling_blade":{"dname": "Quelling Blade",  "qual": "common"},
-    "recipe_bfury":  {"dname": None,              "qual": "common"},   # null dname → skip
-    "yasha":         {"dname": "Yasha",           "qual": "component"},# component → skip
-    "tango":         {"dname": "Tango",           "qual": "consumable"},# consumable → skip
-    "blink":         {"dname": "Blink Dagger",    "qual": "artifact"},
+    "bfury":         {"dname": "Battle Fury",     "qual": "artifact",
+                      "components": ["sacred_relic", "demon_edge"]},
+    "power_treads":  {"dname": "Power Treads",    "qual": "common",
+                      "components": ["boots_of_speed", "gloves_of_haste"]},
+    "manta":         {"dname": "Manta Style",     "qual": "artifact",
+                      "components": ["yasha", "ultimate_orb", "staff_of_wizardry"]},
+    "quelling_blade":{"dname": "Quelling Blade",  "qual": "common"},   # atomic, NOT a part → kept
+    "recipe_bfury":  {"dname": None,              "qual": "common"},   # null dname → drop
+    "yasha":         {"dname": "Yasha",           "qual": "component"},# atomic AND used by manta → drop
+    "tango":         {"dname": "Tango",           "qual": "consumable"},# qual consumable → drop
+    "blink":         {"dname": "Blink Dagger",    "qual": "component"},# atomic but NOT a part → KEPT!
 }
 
 
@@ -85,7 +93,8 @@ def test_blocklist_is_exactly_the_consumable_token_set():
 # ===========================================================================
 
 def test_resolve_item_returns_correct_dict():
-    result = resolve_item(152, ITEM_IDS, ITEMS)
+    # bfury is assembled (has components) — not atomic → kept regardless
+    result = resolve_item(152, ITEM_IDS, ITEMS, set())
     assert result is not None
     assert result["id"] == 152
     assert result["key"] == "item_bfury"
@@ -93,26 +102,40 @@ def test_resolve_item_returns_correct_dict():
 
 
 def test_resolve_item_key_has_item_prefix():
-    result = resolve_item(30, ITEM_IDS, ITEMS)
+    # blink is atomic but NOT in part_keys → kept
+    result = resolve_item(30, ITEM_IDS, ITEMS, set())
     assert result is not None
     assert result["key"] == "item_blink"
 
 
 def test_resolve_item_null_dname_returns_none():
     """Recipes / tokens have dname: null — must be dropped."""
-    result = resolve_item(999, ITEM_IDS, ITEMS)
+    result = resolve_item(999, ITEM_IDS, ITEMS, set())
     assert result is None
 
 
-def test_resolve_item_component_returns_none():
-    """qual=='component' items (e.g. Yasha) must be dropped."""
-    result = resolve_item(10, ITEM_IDS, ITEMS)
+def test_resolve_item_atomic_part_returns_none():
+    """Structural rule: atomic item (no components) used as a buildup part → dropped."""
+    # yasha is atomic (no 'components') and manta uses it → in part_keys
+    part_keys = component_part_keys(ITEMS)
+    assert "yasha" in part_keys          # sanity: fixture is wired correctly
+    result = resolve_item(10, ITEM_IDS, ITEMS, part_keys)
     assert result is None
+
+
+def test_resolve_item_blink_kept_despite_component_qual():
+    """KEY regression guard: Blink Dagger has qual='component' but is atomic
+    and used as a part of nothing → structural rule must KEEP it."""
+    part_keys = component_part_keys(ITEMS)
+    assert "blink" not in part_keys      # sanity: blink is not anyone's component
+    result = resolve_item(30, ITEM_IDS, ITEMS, part_keys)
+    assert result is not None
+    assert result["key"] == "item_blink"
 
 
 def test_resolve_item_consumable_qual_returns_none():
     """qual=='consumable' items must be dropped."""
-    result = resolve_item(20, ITEM_IDS, ITEMS)
+    result = resolve_item(20, ITEM_IDS, ITEMS, set())
     assert result is None
 
 
@@ -122,20 +145,92 @@ def test_resolve_item_blocklist_name_returns_none():
     # to verify the blocklist check is separate from the qual check
     item_ids_fake = {"20": "tango"}
     items_fake    = {"tango": {"dname": "Tango", "qual": "artifact"}}
-    result = resolve_item(20, item_ids_fake, items_fake)
+    result = resolve_item(20, item_ids_fake, items_fake, set())
     assert result is None
 
 
 def test_resolve_item_unknown_id_returns_none():
     """Id not present in item_ids → None."""
-    result = resolve_item(9999, ITEM_IDS, ITEMS)
+    result = resolve_item(9999, ITEM_IDS, ITEMS, set())
     assert result is None
 
 
 def test_resolve_item_unknown_name_returns_none():
     """Id maps to a name not present in items → None."""
     item_ids_partial = {"1": "unknown_item"}
-    result = resolve_item(1, item_ids_partial, ITEMS)
+    result = resolve_item(1, item_ids_partial, ITEMS, set())
+    assert result is None
+
+
+# ===========================================================================
+# component_part_keys
+# ===========================================================================
+
+def test_component_part_keys_returns_union():
+    """Returns the union of every item's components list."""
+    items = {
+        "force_staff":    {"dname": "Force Staff",    "qual": "common",
+                           "components": ["staff_of_wizardry", "ring_of_regen"]},
+        "hurricane_pike": {"dname": "Hurricane Pike", "qual": "artifact",
+                           "components": ["force_staff", "dragon_lance"]},
+        "ring_of_regen":  {"dname": "Ring of Regen",  "qual": "common"},  # atomic
+    }
+    result = component_part_keys(items)
+    assert result == {"staff_of_wizardry", "ring_of_regen", "force_staff", "dragon_lance"}
+
+
+def test_component_part_keys_empty_when_no_components():
+    """No item has a components list → empty set."""
+    items = {
+        "blink": {"dname": "Blink Dagger", "qual": "component"},
+        "tpscroll": {"dname": "Town Portal Scroll", "qual": "consumable"},
+    }
+    assert component_part_keys(items) == set()
+
+
+def test_component_part_keys_ignores_none_components():
+    """items with components: None are treated as atomic (no parts emitted)."""
+    items = {
+        "ring_of_health": {"dname": "Ring of Health", "qual": "component", "components": None},
+        "force_staff":    {"dname": "Force Staff",    "qual": "common",
+                           "components": ["staff_of_wizardry", "ring_of_regen"]},
+    }
+    result = component_part_keys(items)
+    assert "ring_of_health" not in result
+    assert "staff_of_wizardry" in result
+
+
+def test_assembled_item_that_is_also_a_part_is_kept():
+    """An item that HAS a components list (assembled) but is also used as a part
+    of something else must NOT be dropped — only ATOMIC parts are hidden."""
+    # force_staff is assembled (has components) AND used by hurricane_pike
+    items = {
+        "force_staff":    {"dname": "Force Staff",    "qual": "common",
+                           "components": ["staff_of_wizardry", "ring_of_regen"]},
+        "hurricane_pike": {"dname": "Hurricane Pike", "qual": "artifact",
+                           "components": ["force_staff", "dragon_lance"]},
+        "staff_of_wizardry": {"dname": "Staff of Wizardry", "qual": "component"},
+        "ring_of_regen":     {"dname": "Ring of Regen",     "qual": "rare"},
+    }
+    item_ids = {"1": "force_staff", "2": "staff_of_wizardry"}
+    part_keys = component_part_keys(items)
+    assert "force_staff" in part_keys             # it IS a part of hurricane_pike
+    result = resolve_item(1, item_ids, items, part_keys)
+    assert result is not None                      # but it has components → NOT dropped
+    assert result["key"] == "item_force_staff"
+
+
+def test_atomic_raw_part_dropped_by_structural_rule():
+    """An atomic item (no components) referenced in another item's parts → dropped."""
+    items = {
+        "ring_of_health": {"dname": "Ring of Health", "qual": "rare"},    # atomic
+        "hood_of_defiance": {"dname": "Hood of Defiance", "qual": "artifact",
+                             "components": ["ring_of_health", "ring_of_regen"]},
+    }
+    item_ids = {"5": "ring_of_health"}
+    part_keys = component_part_keys(items)
+    assert "ring_of_health" in part_keys
+    result = resolve_item(5, item_ids, items, part_keys)
     assert result is None
 
 
@@ -179,7 +274,7 @@ def test_null_dname_item_absent_from_output():
 # ===========================================================================
 
 def test_component_item_dropped():
-    """Yasha (qual==component) must not appear."""
+    """Yasha is atomic (no components) AND used as a part in manta → dropped by structural rule."""
     pop = {"mid_game_items": {"10": 200, "152": 100}}
     out = transform_item_popularity(pop, ITEM_IDS, ITEMS)
     keys = [it["key"] for it in out.get("mid_game", [])]
