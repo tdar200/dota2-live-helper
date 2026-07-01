@@ -1,0 +1,23 @@
+{
+  "generated_at": "2026-06-30T12:00:00Z",
+  "source": "opendota",
+  "note": "un-bracketed all-MMR aggregate",
+  "heroes": {
+    "npc_dota_hero_juggernaut": {
+      "hero_id": 8,
+      "display": "Juggernaut",
+      "builds": {
+        "start_game": [{"id": 44,  "key": "item_quelling_blade", "display": "Quelling Blade", "count": 41233}],
+        "early_game": [{"id": 63,  "key": "item_power_treads",   "display": "Power Treads",   "count": 38771}],
+        "mid_game":   [{"id": 152, "key": "item_bfury",          "display": "Battle Fury",    "count": 29344}],
+        "late_game":  [{"id": 116, "key": "item_manta",          "display": "Manta Style",    "count": 21002}]
+      },
+      "benchmarks": {
+        "percentiles":       [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99],
+        "gold_per_min":      [312, 378, 431, 479, 527, 578, 634, 701, 792, 861, 988],
+        "xp_per_min":        [402, 468, 521, 569, 617, 668, 724, 791, 882, 951, 1078],
+        "last_hits_per_min": [3.1, 4.0, 4.7, 5.3, 5.9, 6.5, 7.2, 8.0, 9.1, 9.9, 11.4]
+      }
+    }
+  }
+}
