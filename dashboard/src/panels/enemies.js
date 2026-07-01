@@ -14,15 +14,25 @@ export function initEnemies(engineHost) {
   function render() {
     const names = keyToDisplay();
     chips.innerHTML = selected
-      .map((k) => `<span class="chip" data-key="${k}">${names[k] || k} ✕</span>`)
+      .map((k) => {
+        const displayName = names[k] || k;
+        return `<span class="chip" data-key="${k}" tabindex="0" role="button" aria-label="remove ${displayName}">${displayName} ✕</span>`;
+      })
       .join("");
-    chips.querySelectorAll(".chip").forEach((c) =>
-      c.addEventListener("click", () => {
+    chips.querySelectorAll(".chip").forEach((c) => {
+      function remove() {
         selected = selected.filter((k) => k !== c.dataset.key);
         push();
         render();
-      })
-    );
+      }
+      c.addEventListener("click", remove);
+      c.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          remove();
+        }
+      });
+    });
   }
 
   async function push() {

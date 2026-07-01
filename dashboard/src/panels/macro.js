@@ -10,11 +10,13 @@ export function renderMacro(payload) {
   const pct = document.getElementById("win-pct");
   const reasons = document.getElementById("macro-reasons");
   const roshInfo = document.getElementById("rosh-info");
+  const panel = document.getElementById("macro-panel");
   if (!m) {
     rec.textContent = "—";
+    panel.dataset.winBand = "none";
     return;
   }
-  rec.textContent = m.recommendation;
+  rec.textContent = m.recommendation.replace(/_/g, " ");
   rec.className = `rec-${m.recommendation}`;
   if (m.win_prob == null) {
     fill.style.width = "0%";
@@ -24,6 +26,12 @@ export function renderMacro(payload) {
     fill.style.width = `${p}%`;
     pct.textContent = `${p}%`;
   }
+  let band = "none";
+  if (m.win_prob != null) {
+    const p = m.win_prob; // 0..1
+    band = p < 0.42 ? "lose" : p > 0.58 ? "win" : "even";
+  }
+  panel.dataset.winBand = band;
   reasons.innerHTML = (m.reasons || []).map((r) => `<li>${r}</li>`).join("");
   if (m.roshan && payload.clock_time != null) {
     const until = m.roshan.window_start_s - payload.clock_time;

@@ -41,17 +41,19 @@
           <h2>Draft — pick ranking</h2>
           <div id="draft-body"><em>enter the enemy lineup…</em></div>
         </section>
-        <section id="macro-panel" class="panel">
+        <section id="macro-panel" class="panel" data-win-band="none">
           <h2>Macro</h2>
+          <div id="macro-rec">—</div>
           <div class="winbar"><div id="win-fill"></div><span id="win-pct">—</span></div>
+          <ul id="macro-reasons"></ul>
           <label class="nwl">Net-worth lead
             <input id="nwl-input" type="number" step="500" placeholder="e.g. 4000" />
           </label>
-          <div id="macro-rec">—</div>
-          <ul id="macro-reasons"></ul>
-          <button id="rosh-btn" type="button">Rosh died</button>
-          <button id="rosh-clear" type="button">clear</button>
-          <span id="rosh-info"></span>
+          <div class="rosh-row">
+            <button id="rosh-btn" type="button">Rosh died</button>
+            <button id="rosh-clear" type="button">clear</button>
+            <span id="rosh-info"></span>
+          </div>
           <div id="farm-body"></div>
         </section>
       </div>
