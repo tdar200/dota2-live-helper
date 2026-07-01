@@ -39,5 +39,5 @@ def win_probability(lead: int, clock_s: int, table: dict | None, *, min_total: i
             .get(str(bucket_lead(lead)))
         )
         if cell and cell.get("total", 0) >= min_total:
-            return cell["wins"] / cell["total"]
+            return cell.get("wins", 0) / cell["total"]
     return _logistic(lead, clock_s)
