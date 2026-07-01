@@ -8,7 +8,10 @@ def load_review(match_id: int, dir: Path = REVIEWS_DIR) -> dict | None:
     path = dir / f"{match_id}.json"
     if not path.exists():
         return None
-    return json.loads(path.read_text())
+    try:
+        return json.loads(path.read_text())
+    except (json.JSONDecodeError, OSError):
+        return None
 
 
 def list_reviews(dir: Path = REVIEWS_DIR) -> list[dict]:

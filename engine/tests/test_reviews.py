@@ -32,3 +32,8 @@ def test_reviews_endpoint_returns_list():
     resp = TestClient(app).get("/reviews")
     assert resp.status_code == 200
     assert isinstance(resp.json(), list)
+
+
+def test_load_review_corrupt_returns_none(tmp_path):
+    (tmp_path / "8.json").write_text("{ not valid json")
+    assert load_review(8, dir=tmp_path) is None
