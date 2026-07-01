@@ -13,6 +13,7 @@ class HeroState(BaseModel):
     alive: bool | None = None
     buyback_cost: int | None = None
     buyback_cooldown: int | None = None
+    respawn_seconds: int | None = None
 
 
 class PlayerState(BaseModel):
