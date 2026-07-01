@@ -1,0 +1,15 @@
+{
+  "hero": "npc_dota_hero_sniper",
+  "display": "Sniper",
+  "source": "KB sniper-keen-scope-build.md",
+  "verified": true,
+  "skill_order": "Max Headshot (E) + Take Aim (W); 1 early Shrapnel (Q); Assassinate at 6/12/18",
+  "talents": {"10": "+Take Aim Passive Range", "15": "+Assassinate Damage", "20": "+Take Aim Duration", "25": "+Max Headshot Knockback"},
+  "starting_items": ["item_tango", "item_branches", "item_slippers", "item_circlet"],
+  "core_items": ["item_power_treads", "item_hurricane_pike", "item_mjollnir", "item_greater_crit", "item_black_king_bar"],
+  "situational": [
+    {"item": "item_monkey_king_bar", "trait": "evasion", "note": "vs Butterfly / Windrunner evasion"},
+    {"item": "item_desolator", "trait": "high_armor", "note": "armor shred stacks with Headshot physical damage vs armored targets"},
+    {"item": "item_nullifier", "trait": "tanky_hp", "note": "pierce Manta / save items on tanky enemies"}
+  ]
+}

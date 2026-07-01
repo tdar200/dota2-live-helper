@@ -1,0 +1,15 @@
+{
+  "hero": "npc_dota_hero_skeleton_king",
+  "display": "Wraith King",
+  "source": "KB herald-climbing-heroes.md",
+  "verified": false,
+  "skill_order": "Max Wraithfire Blast (Q); value Vampiric Spirit (E); Reincarnation at 6/12/18",
+  "talents": {"10": "+8 Strength", "15": "+30 Movement Speed", "20": "+90 Skeleton Charge Damage", "25": "+2 Skeletons per Death"},
+  "starting_items": ["item_tango", "item_quelling_blade", "item_gauntlets", "item_circlet"],
+  "core_items": ["item_power_treads", "item_armlet", "item_radiance", "item_assault", "item_abyssal"],
+  "situational": [
+    {"item": "item_black_king_bar", "trait": "heavy_magic", "note": "vs heavy magic burst"},
+    {"item": "item_monkey_king_bar", "trait": "evasion", "note": "vs evasion"},
+    {"item": "item_nullifier", "trait": "tanky_hp", "note": "vs tanky / save items"}
+  ]
+}

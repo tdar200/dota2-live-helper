@@ -1,0 +1,15 @@
+{
+  "hero": "npc_dota_hero_spectre",
+  "display": "Spectre",
+  "source": "KB spectre-desolate-dispersion-build.md",
+  "verified": false,
+  "skill_order": "Max Spectral Dagger (Q); value Desolate; Dispersion as able; Haunt at 6/12/18",
+  "talents": {"10": "+15 Attack Speed", "15": "+12 Strength", "20": "-30s Haunt Cooldown", "25": "+1.5s Dagger Path Duration"},
+  "starting_items": ["item_tango", "item_quelling_blade", "item_circlet", "item_branches"],
+  "core_items": ["item_power_treads", "item_manta", "item_radiance", "item_skadi", "item_abyssal"],
+  "situational": [
+    {"item": "item_black_king_bar", "trait": "heavy_magic", "note": "vs heavy magic burst"},
+    {"item": "item_nullifier", "trait": "tanky_hp", "note": "vs tanky / save items"},
+    {"item": "item_butterfly", "trait": "evasion", "note": "vs right-click / evasion"}
+  ]
+}

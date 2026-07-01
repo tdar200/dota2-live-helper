@@ -1,0 +1,15 @@
+{
+  "hero": "npc_dota_hero_zuus",
+  "display": "Zeus",
+  "source": "KB zeus-caster-refresher-build.md",
+  "verified": true,
+  "skill_order": "Max Arc Lightning (Q) + Lightning Bolt (W); 1 pt Heavenly Jump; Thundergod's Wrath at 6/12/18",
+  "talents": {"10": "+200 HP", "15": "-20% Arc Lightning Cooldown/Mana", "20": "+Arc Lightning Damage", "25": "AoE Lightning Bolt"},
+  "starting_items": ["item_tango", "item_clarity", "item_branches", "item_branches"],
+  "core_items": ["item_arcane_boots", "item_ultimate_scepter", "item_yasha_and_kaya", "item_octarine_core", "item_refresher"],
+  "situational": [
+    {"item": "item_black_king_bar", "trait": "lockdown_silence", "note": "vs silencers / stuns preventing spell casts"},
+    {"item": "item_ethereal_blade", "trait": "healing_regen", "note": "single-target delete + 40% heal reduction on high-regen enemies"},
+    {"item": "item_nullifier", "trait": "tanky_hp", "note": "dispel defensive items on tanky / save-item enemies"}
+  ]
+}
