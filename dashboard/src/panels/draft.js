@@ -1,3 +1,5 @@
+import { heroImg } from "./icons.js";
+
 function pct(x) {
   return x == null ? "—" : `${Math.round(x * 100)}%`;
 }
@@ -17,7 +19,7 @@ export function renderDraft(payload) {
       const why = p.reasons.length ? ` — ${p.reasons.join("; ")}` : "";
       return `<li class="pick ${best}">
         <span class="rank">${i + 1}.</span>
-        <span class="pname">${p.display}</span> ${badge}
+        ${heroImg(p.hero)}<span class="pname">${p.display}</span> ${badge}
         <span class="pscore">${pct(p.score)}</span>
         <span class="pwhy">${why}</span>
       </li>`;

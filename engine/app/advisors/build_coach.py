@@ -1,6 +1,17 @@
 from pydantic import BaseModel, Field
 from app.advisors.context import AdviceContext
 
+# Assembled stat items that are ALWAYS a stepping stone to a final item
+# (Yasha/Sange/Kaya -> Manta / Sange-and-Yasha / Diffusal / Kaya-and-Sange /
+# Yasha-and-Kaya). OpenDota's itemPopularity counts them because players held
+# them mid-assembly; Dota Plus never renders them as a build step. Purely
+# structural rules can't catch these (they have components, like real finals
+# such as Force Staff), so this is a curated read-time demotion. Keys are the
+# engine's "item_<name>" form (PhaseItem.key). Dropping them from phases means
+# suggested_next (a first-unowned scan over the filtered phases) can never land
+# on a stepping stone.
+INTERMEDIATE_KEYS = {"item_yasha", "item_sange", "item_kaya"}
+
 
 class CoreItem(BaseModel):
     item: str
@@ -67,6 +78,7 @@ def advise(ctx: AdviceContext) -> BuildAdvice:
             ph: [
                 CoreItem(item=pi.key, display=pi.display, owned=pi.key in owned)
                 for pi in ib.builds.get(ph, [])
+                if pi.key not in INTERMEDIATE_KEYS
             ]
             for ph in order
         }

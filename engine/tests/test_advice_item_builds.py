@@ -79,6 +79,48 @@ def test_payload_degrades_without_cache(monkeypatch):
     assert payload.farm is None or payload.farm.has_data is False
 
 
+def _make_yasha_manta_ib() -> HeroItemBuild:
+    """Non-curated hero whose mid_game holds a stepping-stone (item_yasha)
+    ahead of a real final (item_manta). build_coach must demote the yasha."""
+    return HeroItemBuild(
+        hero_id=75,
+        display="Silencer",
+        builds={
+            "mid_game": [
+                PhaseItem(id=10, key="item_yasha", display="Yasha", count=20000),
+                PhaseItem(id=116, key="item_manta", display="Manta Style", count=15000),
+            ],
+        },
+        benchmarks=Benchmarks(),
+    )
+
+
+def test_intermediate_dropped_and_next_is_manta(monkeypatch):
+    """build_coach.INTERMEDIATE_KEYS drops item_yasha from phases, so a
+    first-unowned scan for suggested_next skips the stepping stone and lands
+    on item_manta (regression guard for the no-stepping-stone-NEXT fix)."""
+    from app.advisors.build_coach import INTERMEDIATE_KEYS
+
+    assert INTERMEDIATE_KEYS == {"item_yasha", "item_sange", "item_kaya"}
+
+    populated = ItemBuildData(
+        has_data=True,
+        heroes={_NONCURATED: _make_yasha_manta_ib()},
+    )
+    monkeypatch.setattr(advice_module, "ITEM_BUILDS", populated)
+
+    state = GameState(clock_time=600)  # mid_game phase
+    state.hero = HeroState(name=_NONCURATED)
+    payload = build_advice(state)
+
+    assert payload.build.source == "opendota"
+    mid_keys = [c.item for c in payload.build.phases["mid_game"]]
+    assert "item_yasha" not in mid_keys
+    assert "item_manta" in mid_keys
+    assert payload.build.suggested_next is not None
+    assert payload.build.suggested_next.item == "item_manta"
+
+
 def test_model_dump_serializes(monkeypatch):
     """
     build_advice(state).model_dump() must succeed, confirming new fields

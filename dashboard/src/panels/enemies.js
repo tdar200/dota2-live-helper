@@ -1,5 +1,7 @@
 // Enemy picker: loads the hero list, lets the user add/remove enemies,
 // and POSTs the current lineup to the engine.
+import { heroImg } from "./icons.js";
+
 export function initEnemies(engineHost) {
   const base = `http://${engineHost}`;
   const chips = document.getElementById("enemy-chips");
@@ -16,7 +18,7 @@ export function initEnemies(engineHost) {
     chips.innerHTML = selected
       .map((k) => {
         const displayName = names[k] || k;
-        return `<span class="chip" data-key="${k}" tabindex="0" role="button" aria-label="remove ${displayName}">${displayName} ✕</span>`;
+        return `<span class="chip" data-key="${k}" tabindex="0" role="button" aria-label="remove ${displayName}">${heroImg(k)}${displayName} ✕</span>`;
       })
       .join("");
     chips.querySelectorAll(".chip").forEach((c) => {

@@ -344,6 +344,30 @@ ol.picks { list-style: none; margin: 0; padding: 0; }
   padding: .05rem .4rem;
 }
 
+/* ── Dota art: item squares + hero avatars (loaded client-side from CDN) ─── */
+/* Broken/blocked assets self-hide via onerror, so the text chip stays intact. */
+.i-item, .i-hero {
+  vertical-align: middle;
+  object-fit: cover;
+  border-radius: 3px;
+  background: var(--void);
+  flex-shrink: 0;
+}
+.i-item { width: 22px; height: 22px; margin-right: .3rem; }         /* square item glyph */
+.i-hero {                                                            /* cropped 16:9 avatar */
+  width: 30px; height: 18px;
+  object-position: center 22%;
+  border: 1px solid var(--edge);
+}
+/* Keep core chips vertically centred once an icon is inline. */
+.core { display: inline-flex; align-items: center; }
+/* NEXT callout: larger glyph, spacing handled by the flex row's baseline. */
+#build-panel .next .i-item { width: 26px; height: 26px; margin-right: 0; align-self: center; }
+/* Chips: portrait replaces the team-colour dot; ring keeps the team tint. */
+.chip .i-hero { width: 26px; height: 16px; border-color: color-mix(in srgb, var(--dire) 55%, var(--edge)); }
+.chip.ally .i-hero { border-color: color-mix(in srgb, var(--radiant) 55%, var(--edge)); }
+.chip:has(.i-hero)::before { display: none; }
+
 /* ══ THE CALL — the signature instrument ═════════════════════════════════ */
 #macro-panel {
   border-top: 1px solid var(--live);

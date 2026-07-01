@@ -1,4 +1,6 @@
 // Ally picker: same UX as the enemy picker, posts to /allies.
+import { heroImg } from "./icons.js";
+
 export function initAllies(engineHost) {
   const base = `http://${engineHost}`;
   const chips = document.getElementById("ally-chips");
@@ -14,7 +16,7 @@ export function initAllies(engineHost) {
     chips.innerHTML = selected
       .map((k) => {
         const displayName = names[k] || k;
-        return `<span class="chip ally" data-key="${k}" tabindex="0" role="button" aria-label="remove ${displayName}">${displayName} ✕</span>`;
+        return `<span class="chip ally" data-key="${k}" tabindex="0" role="button" aria-label="remove ${displayName}">${heroImg(k)}${displayName} ✕</span>`;
       })
       .join("");
     chips.querySelectorAll(".chip").forEach((c) => {
