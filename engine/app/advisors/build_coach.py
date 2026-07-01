@@ -25,6 +25,23 @@ class BuildAdvice(BaseModel):
     skill_next: str | None = None
     talent_next: str | None = None
     situational: list[SituationalItem] = Field(default_factory=list)
+    source: str = "curated"
+    phases: dict[str, list[CoreItem]] = Field(default_factory=dict)
+    suggested_next: CoreItem | None = None
+
+
+def _phase_for_clock(clock) -> str:
+    """Return the build phase name for a given clock_time (seconds).
+
+    Guards clock_time=None and negative values (menu / replay frames).
+    """
+    if clock is None or clock < 0:
+        return "start_game"
+    if clock < 600:
+        return "early_game"
+    if clock < 1500:
+        return "mid_game"
+    return "late_game"
 
 
 def _talent_for_level(talents: dict[str, str], level: int) -> str | None:
@@ -40,7 +57,28 @@ def advise(ctx: AdviceContext) -> BuildAdvice:
     hero = ctx.state.hero.name
     build = ctx.build_db.get(hero) if hero else None
     if build is None:
-        return BuildAdvice(has_build=False, hero=hero)
+        ib = ctx.item_build_db.get(hero) if hero else None
+        if ib is None:
+            return BuildAdvice(has_build=False, source="none", hero=hero)
+        owned = set(ctx.state.items)
+        order = ["start_game", "early_game", "mid_game", "late_game"]
+        phases = {
+            ph: [
+                CoreItem(item=pi.key, display=pi.display, owned=pi.key in owned)
+                for pi in ib.builds.get(ph, [])
+            ]
+            for ph in order
+        }
+        cur = _phase_for_clock(ctx.state.clock_time)
+        suggested = None
+        for ph in order[order.index(cur):]:
+            suggested = next((c for c in phases[ph] if not c.owned), None)
+            if suggested:
+                break
+        return BuildAdvice(
+            has_build=True, source="opendota", hero=hero,
+            hero_display=ib.display, phases=phases, suggested_next=suggested,
+        )
 
     owned = set(ctx.state.items)
     core = [
