@@ -70,3 +70,57 @@ ul.moments { list-style: none; margin: .6rem 0 0; padding: 0; }
 .mom-row.threw b { color: #ff9a9a; }
 .mom-row.gain b { color: #6ee787; }
 .mom-row span { color: #8a93a0; font-variant-numeric: tabular-nums; margin-right: .4rem; }
+
+/* ── Single-screen HUD layout: tile the panels, page never scrolls ─────────── */
+html, body { height: 100%; }
+body { display: flex; flex-direction: column; overflow: hidden; font-size: 13px; }
+header { padding: .35rem .8rem; }
+h1 { font-size: 1rem; }
+.clock { font-size: 1.1rem; }
+main { flex: 1; min-height: 0; display: flex; flex-direction: column; padding: 0; }
+#tabs { padding: .3rem .5rem 0; margin: 0; }
+
+#live-view {
+  flex: 1; min-height: 0;
+  display: grid; gap: .5rem; padding: .5rem; box-sizing: border-box;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto auto 1fr;
+  grid-template-areas:
+    "macro   build   draft"
+    "timings enemies draft"
+    "timings allies  draft";
+}
+#macro-panel   { grid-area: macro; }
+#build-panel   { grid-area: build; }
+#draft-panel   { grid-area: draft; }
+#timings-panel { grid-area: timings; }
+#enemies-panel { grid-area: enemies; }
+#allies-panel  { grid-area: allies; }
+
+/* tiles: distinct, compact, internally scrollable so the page stays fixed */
+#live-view .panel {
+  min-height: 0; overflow: auto; padding: .45rem .6rem;
+  background: #0e1218; border: 1px solid #1c2129; border-radius: 8px;
+}
+.panel h2 {
+  margin: 0 0 .35rem; font-size: .68rem; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase; color: #7d8795;
+}
+/* trim the loudest bits so tiles stay dense */
+#macro-rec { font-size: 1.15rem; margin: .2rem 0; }
+#build-panel .next { font-size: 1rem; }
+.winbar { height: 18px; margin-bottom: .35rem; }
+
+/* review view fills too, its own panel scrolls internally */
+#review-view { flex: 1; min-height: 0; padding: .5rem; box-sizing: border-box; display: flex; }
+#review-view .panel { flex: 1; min-height: 0; overflow: auto; background: #0e1218; border: 1px solid #1c2129; border-radius: 8px; }
+
+/* narrow screens (phone/tablet): stack and allow normal scrolling */
+@media (max-width: 1000px) {
+  body { overflow: auto; }
+  #live-view {
+    height: auto; grid-template-columns: 1fr;
+    grid-template-areas: "macro" "build" "timings" "draft" "enemies" "allies";
+  }
+  #live-view .panel { max-height: none; }
+}
