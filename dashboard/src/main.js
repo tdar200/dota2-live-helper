@@ -1,5 +1,7 @@
 import { connect } from "./ws.js";
 import { renderTimings, renderClock } from "./panels/timings.js";
+import { renderBuild } from "./panels/build.js";
+import { initEnemies } from "./panels/enemies.js";
 
 // Single-process: the engine serves this page, so the WS shares its host:port.
 // Vite dev mode (port 5173) is the exception — the engine runs separately on :3000.
@@ -15,6 +17,8 @@ function onStatus(up) {
 function onMessage(payload) {
   renderClock(payload);
   renderTimings(payload);
+  renderBuild(payload);
 }
 
+initEnemies(ENGINE_HOST);
 connect(WS_URL, onMessage, onStatus);
