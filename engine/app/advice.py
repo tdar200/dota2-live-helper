@@ -1,7 +1,8 @@
 from pydantic import BaseModel, Field
 from app.state import GameState
-from app.modules.timings import TimingHit, next_occurrences
-from app.timing_constants import GAME_EVENTS
+from app.modules.timings import TimingHit
+from app.advisors.context import AdviceContext
+from app.advisors import timings as timings_advisor
 
 
 class AdvicePayload(BaseModel):
@@ -11,8 +12,5 @@ class AdvicePayload(BaseModel):
 
 
 def build_advice(state: GameState, *, horizon_s: int = 600, limit: int = 6) -> AdvicePayload:
-    if state.clock_time is None:
-        return AdvicePayload(clock_time=None, timings=[])
-    hits = next_occurrences(state.clock_time, GAME_EVENTS)
-    hits = [h for h in hits if h.seconds_until <= horizon_s][:limit]
-    return AdvicePayload(clock_time=state.clock_time, timings=hits)
+    ctx = AdviceContext(state=state, horizon_s=horizon_s, limit=limit)
+    return AdvicePayload(clock_time=state.clock_time, timings=timings_advisor.advise(ctx))
