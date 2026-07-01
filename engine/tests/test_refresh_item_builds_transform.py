@@ -435,3 +435,24 @@ def test_build_hero_entry_no_timestamp():
     )
     assert "generated_at" not in entry
     assert "timestamp"    not in entry
+
+
+def test_finished_whitelist_keeps_blink_and_ghost():
+    """Blink/Ghost are atomic AND used as upgrade components, but are real
+    build items — the whitelist must keep them while still dropping raw parts."""
+    from refresh_item_builds import resolve_item, component_part_keys, FINISHED_WHITELIST
+    item_ids = {"1": "blink", "2": "mystic_staff", "3": "ghost"}
+    items = {
+        "blink": {"dname": "Blink Dagger", "qual": "component"},
+        "mystic_staff": {"dname": "Mystic Staff", "qual": "secret_shop"},
+        "ghost": {"dname": "Ghost Scepter", "qual": "component"},
+        "swift_blink": {"dname": "Swift Blink", "components": ["blink"]},
+        "ethereal_blade": {"dname": "Ethereal Blade", "components": ["ghost"]},
+        "yasha": {"dname": "Yasha", "components": ["mystic_staff"]},
+    }
+    pk = component_part_keys(items)
+    assert {"blink", "ghost", "mystic_staff"} <= pk
+    assert {"blink", "ghost"} <= FINISHED_WHITELIST
+    assert resolve_item(1, item_ids, items, pk) is not None   # blink kept
+    assert resolve_item(3, item_ids, items, pk) is not None   # ghost kept
+    assert resolve_item(2, item_ids, items, pk) is None        # mystic_staff dropped

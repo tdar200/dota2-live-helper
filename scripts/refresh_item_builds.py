@@ -47,6 +47,12 @@ CONSUMABLE_BLOCKLIST: set[str] = {
     "branches",
 }
 
+# Atomic finished items that ARE used as a component of an upgrade (so the
+# structural buildup-part rule would wrongly drop them). Blink Dagger builds
+# into the upgraded blinks; Ghost Scepter builds into Ethereal Blade — but both
+# are real items players buy and show in a build.
+FINISHED_WHITELIST: set[str] = {"blink", "ghost"}
+
 PHASE_MAP: dict[str, str] = {
     "start_game_items": "start_game",
     "early_game_items": "early_game",
@@ -108,7 +114,11 @@ def resolve_item(
     if meta.get("qual") == "consumable":
         return None
 
-    if meta.get("components") is None and name in part_keys:
+    if (
+        meta.get("components") is None
+        and name in part_keys
+        and name not in FINISHED_WHITELIST
+    ):
         return None
 
     return {
