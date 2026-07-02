@@ -45,3 +45,26 @@ def test_parse_gsi_no_abilities_block_degrades():
     assert state.hero.abilities == []
     assert state.hero.aghanims_scepter is None
     assert state.hero.aghanims_shard is None
+
+
+def test_parse_gsi_account_id_from_accountid():
+    raw = json.loads(FIX.read_text())
+    raw["player"]["accountid"] = "39734272"
+    state = parse_gsi(raw)
+    assert state.player.account_id == 39734272
+
+
+def test_parse_gsi_account_id_derived_from_steamid():
+    raw = json.loads(FIX.read_text())
+    raw["player"].pop("accountid", None)
+    # fixture steamid = 76561198000000000 -> 39734272 after the Steam64 offset
+    state = parse_gsi(raw)
+    assert state.player.account_id == 76561198000000000 - 76561197960265728
+
+
+def test_parse_gsi_account_id_absent_is_none():
+    raw = json.loads(FIX.read_text())
+    raw["player"].pop("accountid", None)
+    raw["player"].pop("steamid", None)
+    state = parse_gsi(raw)
+    assert state.player.account_id is None

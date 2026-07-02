@@ -18,12 +18,14 @@ from app.matchups import load_matchups
 from app.winprob import load_winprob
 from app.item_builds import load_item_builds
 from app.hero_meta import load_hero_meta
+from app.personal_stats import load_personal_stats
 
 BUILD_DATA = load_build_data()
 MATCHUP_DATA = load_matchups()
 WINPROB_TABLE = load_winprob()
 ITEM_BUILDS = load_item_builds()
 HERO_META = load_hero_meta()
+PERSONAL_STATS = load_personal_stats()
 
 
 class AdvicePayload(BaseModel):
@@ -52,6 +54,8 @@ def build_advice(state: GameState, *, horizon_s: int = 600, limit: int = 6) -> A
         winprob_table=WINPROB_TABLE,
         item_build_db=ITEM_BUILDS.heroes,
         hero_meta_db=HERO_META.heroes,
+        personal_hero_db=PERSONAL_STATS.heroes,
+        personal_item_db=PERSONAL_STATS.items,
     )
     return AdvicePayload(
         clock_time=state.clock_time,

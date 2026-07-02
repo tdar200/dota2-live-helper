@@ -17,6 +17,10 @@ class CoreItem(BaseModel):
     item: str
     display: str
     owned: bool
+    # YOUR personal win-rate with this item on this hero (scripts/refresh_personal_stats.py).
+    # None when you have no games with it; the dashboard gates display on sample size.
+    personal_winrate: float | None = None
+    personal_games: int | None = None
 
 
 class SituationalItem(BaseModel):
@@ -42,6 +46,10 @@ class BuildAdvice(BaseModel):
     # Herald (bracket 1) pub win-rate for the current hero, from OpenDota
     # heroStats (scripts/refresh_hero_meta.py). None when meta cache absent.
     herald_winrate: float | None = None
+    # YOUR personal win-rate on this hero (scripts/refresh_personal_stats.py).
+    # None when the personal cache is absent or you've never played the hero.
+    personal_winrate: float | None = None
+    personal_games: int | None = None
 
 
 def _phase_for_clock(clock) -> str:
@@ -72,21 +80,41 @@ def _herald_winrate(ctx: AdviceContext, hero: str | None) -> float | None:
     return getattr(meta, "herald_winrate", None) if meta is not None else None
 
 
+def _personal_hero(ctx: AdviceContext, hero: str | None) -> tuple[float | None, int | None]:
+    """(your winrate, your games) on this hero, or (None, None) if unplayed/absent."""
+    hw = ctx.personal_hero_db.get(hero) if hero else None
+    if hw is None:
+        return None, None
+    return getattr(hw, "winrate", None), getattr(hw, "games", None)
+
+
+def _core_item(ctx: AdviceContext, hero: str | None, item: str, display: str, owned: bool) -> "CoreItem":
+    """Build a CoreItem, attaching YOUR personal win-rate with this item on this hero."""
+    iw = ctx.personal_item_db.get(hero, {}).get(item) if hero else None
+    return CoreItem(
+        item=item, display=display, owned=owned,
+        personal_winrate=getattr(iw, "winrate", None) if iw is not None else None,
+        personal_games=getattr(iw, "games", None) if iw is not None else None,
+    )
+
+
 def advise(ctx: AdviceContext) -> BuildAdvice:
     hero = ctx.state.hero.name
     herald_wr = _herald_winrate(ctx, hero)
+    p_wr, p_games = _personal_hero(ctx, hero)
     build = ctx.build_db.get(hero) if hero else None
     if build is None:
         ib = ctx.item_build_db.get(hero) if hero else None
         if ib is None:
             return BuildAdvice(has_build=False, source="none", hero=hero,
                                hero_display=ctx.hero_names.get(hero, hero),
-                               herald_winrate=herald_wr)
+                               herald_winrate=herald_wr,
+                               personal_winrate=p_wr, personal_games=p_games)
         owned = set(ctx.state.items)
         order = ["start_game", "early_game", "mid_game", "late_game"]
         phases = {
             ph: [
-                CoreItem(item=pi.key, display=pi.display, owned=pi.key in owned)
+                _core_item(ctx, hero, pi.key, pi.display, pi.key in owned)
                 for pi in ib.builds.get(ph, [])
                 if pi.key not in INTERMEDIATE_KEYS
             ]
@@ -102,11 +130,12 @@ def advise(ctx: AdviceContext) -> BuildAdvice:
             has_build=True, source="opendota", hero=hero,
             hero_display=ib.display, phases=phases, suggested_next=suggested,
             herald_winrate=herald_wr,
+            personal_winrate=p_wr, personal_games=p_games,
         )
 
     owned = set(ctx.state.items)
     core = [
-        CoreItem(item=i, display=ctx.item_names.get(i, i), owned=i in owned)
+        _core_item(ctx, hero, i, ctx.item_names.get(i, i), i in owned)
         for i in build.core_items
     ]
     next_core = next((c for c in core if not c.owned), None)
@@ -134,4 +163,5 @@ def advise(ctx: AdviceContext) -> BuildAdvice:
         talent_next=_talent_for_level(build.talents, ctx.state.hero.level or 0),
         situational=situational,
         herald_winrate=herald_wr,
+        personal_winrate=p_wr, personal_games=p_games,
     )

@@ -13,6 +13,31 @@ def _as_bool(v):
     return bool(v)
 
 
+# Steam64 -> Steam32 (Dota account id) offset.
+_STEAM64_BASE = 76561197960265728
+
+
+def _account_id(p: dict) -> int | None:
+    """The player's 32-bit Dota account id from a GSI `player` block.
+
+    GSI usually sends `accountid` directly (as a numeric string); if only
+    `steamid` (64-bit) is present, derive the 32-bit id from it.
+    """
+    acc = p.get("accountid")
+    if acc is not None:
+        try:
+            return int(acc)
+        except (TypeError, ValueError):
+            return None
+    steam = p.get("steamid")
+    if steam is not None:
+        try:
+            return int(steam) - _STEAM64_BASE
+        except (TypeError, ValueError):
+            return None
+    return None
+
+
 def _parse_abilities(raw: dict) -> list[AbilityState]:
     """Scan ability0..29 faithfully (keep talents/passives); skip empties.
 
@@ -79,6 +104,7 @@ def parse_gsi(raw: dict) -> GameState:
             gpm=p.get("gpm"),
             xpm=p.get("xpm"),
             last_hits=p.get("last_hits"),
+            account_id=_account_id(p),
         ),
         items=items,
     )

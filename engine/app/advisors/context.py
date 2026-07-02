@@ -19,3 +19,7 @@ class AdviceContext:
     winprob_table: object | None = None
     item_build_db: dict = field(default_factory=dict)
     hero_meta_db: dict = field(default_factory=dict)
+    # hero_key -> HeroWR  (your personal per-hero win-rate)
+    personal_hero_db: dict = field(default_factory=dict)
+    # hero_key -> {item_key -> ItemWR}  (your personal per-item win-rate)
+    personal_item_db: dict = field(default_factory=dict)

@@ -326,6 +326,35 @@ ul.situational { list-style: none; margin: .4rem 0 0; padding: 0; }
 .herald-wr.wr-good { color: #7bd88f; border: 1px solid rgba(123, 216, 143, .35); }
 .herald-wr.wr-bad  { color: #e5915f; border: 1px solid rgba(229, 145, 95, .35); }
 
+/* YOUR personal win-rate — filled (vs herald's outline) so it reads as your
+   own data, and gold-ringed to signal "this is you". Header badge. */
+.you-wr {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: .62rem;
+  letter-spacing: .02em;
+  padding: .04rem .34rem;
+  border-radius: 3px;
+  vertical-align: middle;
+  white-space: nowrap;
+  box-shadow: inset 0 0 0 1px rgba(227, 179, 65, .5);
+}
+.you-wr.wr-good { color: #0d1f12; background: #7bd88f; }
+.you-wr.wr-bad  { color: #2a1008; background: #e5915f; }
+
+/* Compact per-item personal win-rate suffix inside a build chip. */
+.you-chip {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: .56rem;
+  padding: .02rem .18rem;
+  margin-left: .18rem;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+.you-chip.wr-good { color: #7bd88f; background: rgba(123, 216, 143, .14); }
+.you-chip.wr-bad  { color: #e5915f; background: rgba(229, 145, 95, .14); }
+
 /* ── Draft ranking ───────────────────────────────────────────────────────── */
 .draft-note { font-family: var(--font-body); font-size: .78rem; color: var(--gold); margin-bottom: .45rem; }
 ol.picks { list-style: none; margin: 0; padding: 0; }

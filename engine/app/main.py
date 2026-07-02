@@ -60,6 +60,16 @@ async def heroes() -> list[dict]:
     return BUILD_DATA.heroes
 
 
+@app.get("/whoami")
+async def whoami() -> dict:
+    """The account id auto-captured from live GSI (null until a game streams).
+
+    scripts/refresh_personal_stats.py polls this so the refresh needs no
+    --account-id once you've played/spectated a game since the engine started.
+    """
+    return {"account_id": STATE.player.account_id}
+
+
 @app.post("/networth")
 async def networth(request: Request) -> dict:
     body = await request.json()
