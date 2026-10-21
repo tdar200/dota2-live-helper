@@ -17,7 +17,7 @@
     "kills": 1, "deaths": 0, "assists": 2,
     "last_hits": 20, "denies": 3,
     "gold": 1500, "gold_reliable": 300, "gold_unreliable": 1200,
-    "gpm": 380, "xpm": 420
+    "gpm": 380, "xpm": 420, "hero_damage": 2400
   },
   "hero": {
     "id": 35,

@@ -224,6 +224,7 @@ def build_payload(
     item_agg: dict[str, dict[str, dict]],
     processed_ids,
     generated_at: str,
+    match_history: list[dict] | None = None,
 ) -> dict:
     """Assemble the cache dict (winrate computed for hero + item halves)."""
     return {
@@ -233,7 +234,46 @@ def build_payload(
         "heroes": hero_stats,
         "items": finalize_item_agg(item_agg),
         "processed_match_ids": sorted(int(m) for m in processed_ids),
+        "match_history": match_history or [],
     }
+
+
+def build_match_history(matches: list[dict], id_to_key: dict[int, str]) -> list[dict]:
+    """Compact per-match records from the /players/{id}/matches list (no extra
+    fetches — the list already carries KDA/duration/start_time/party/rank).
+
+    Returns records newest-first. `win` is derived from player_slot vs
+    radiant_win (None if either is missing). Powers the trends dashboard.
+    """
+    out: list[dict] = []
+    for m in matches:
+        mid = m.get("match_id")
+        if mid is None:
+            continue
+        slot = m.get("player_slot")
+        rwin = m.get("radiant_win")
+        win = won_from_slot(slot, rwin) if (slot is not None and rwin is not None) else None
+        hid = m.get("hero_id")
+        try:
+            hero = id_to_key.get(int(hid)) if hid is not None else None
+        except (TypeError, ValueError):
+            hero = None
+        out.append({
+            "match_id": int(mid),
+            "start_time": m.get("start_time"),
+            "duration": m.get("duration"),
+            "win": win,
+            "hero": hero,
+            "kills": m.get("kills"),
+            "deaths": m.get("deaths"),
+            "assists": m.get("assists"),
+            "party_size": m.get("party_size"),
+            "game_mode": m.get("game_mode"),
+            "lobby_type": m.get("lobby_type"),
+            "average_rank": m.get("average_rank"),
+        })
+    out.sort(key=lambda r: (r["start_time"] is None, -(r["start_time"] or 0)))
+    return out
 
 
 def item_agg_from_payload(data: dict) -> dict[str, dict[str, dict]]:
@@ -267,7 +307,7 @@ def _get_json(url: str) -> object:
         time.sleep(delay - elapsed)
 
     req = urllib.request.Request(url, headers={"User-Agent": "dota2-live-helper/1.0"})
-    for _ in range(3):
+    for attempt in range(3):
         _last_req_time = time.monotonic()
         try:
             with urllib.request.urlopen(req, timeout=30) as resp:
@@ -281,8 +321,13 @@ def _get_json(url: str) -> object:
                 time.sleep(30)
             else:
                 raise
-        except urllib.error.URLError:
-            raise
+        except (TimeoutError, urllib.error.URLError) as e:
+            # Socket read timeouts / transient connection errors are retriable —
+            # OpenDota is occasionally slow. Give up only after all attempts.
+            if attempt == 2:
+                raise
+            print(f"  transient network error ({e}); retrying in 5 s…", file=sys.stderr)
+            time.sleep(5)
 
     raise RuntimeError(f"gave up after 3 attempts on {url}")
 
@@ -319,11 +364,12 @@ def fetch_constants() -> tuple[dict, dict]:
     return item_ids, items
 
 
-def _save(account_id, hero_stats, item_agg, processed) -> None:
+def _save(account_id, hero_stats, item_agg, processed, match_history=None) -> None:
     CACHE.parent.mkdir(parents=True, exist_ok=True)
     payload = build_payload(
         account_id, hero_stats, item_agg, processed,
         datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        match_history=match_history,
     )
     CACHE.write_text(json.dumps(payload, indent=2))
 
@@ -374,6 +420,9 @@ def main() -> None:
     if not isinstance(matches, list):
         matches = []
     print(f"  {len(matches)} matches in history.")
+    # Compact per-match records for the trends dashboard (from the list above —
+    # no extra requests). Recomputed each run so it always covers all matches.
+    match_history = build_match_history(matches, id_to_key)
 
     processed: set[int] = set()
     item_agg: dict[str, dict[str, dict]] = {}
@@ -417,10 +466,10 @@ def main() -> None:
             processed.add(mid)
 
         if i % 25 == 0:
-            _save(account_id, hero_stats, item_agg, processed)
+            _save(account_id, hero_stats, item_agg, processed, match_history)
             print(f"  …{i}/{total} (saved)")
 
-    _save(account_id, hero_stats, item_agg, processed)
+    _save(account_id, hero_stats, item_agg, processed, match_history)
     n_items = sum(len(v) for v in finalize_item_agg(item_agg).values())
     print(f"\nWrote {CACHE}")
     print(f"  {len(hero_stats)} heroes, {n_items} (hero,item) cells, "

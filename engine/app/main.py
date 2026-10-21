@@ -2,10 +2,12 @@ from pathlib import Path
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+import time
 from app.state import GameState
-from app.advice import build_advice, BUILD_DATA
+from app.advice import build_advice, BUILD_DATA, PERSONAL_STATS
 from app.hub import Hub
 from app.reviews import load_review, list_reviews
+from app.trends import compute_trends
 
 app = FastAPI(title="Dota 2 Live Helper")
 app.add_middleware(
@@ -97,6 +99,14 @@ async def review(match_id: int) -> dict:
 @app.get("/reviews")
 async def reviews() -> list[dict]:
     return list_reviews()
+
+
+@app.get("/trends")
+async def trends() -> dict:
+    """Your personal trends (form, streaks, KDA, bracket, best/worst heroes)
+    from the match-history slice of the personal cache. Run
+    scripts/refresh_personal_stats.py to populate it, then restart the engine."""
+    return compute_trends(PERSONAL_STATS, int(time.time())).model_dump()
 
 
 if _DIST.exists():

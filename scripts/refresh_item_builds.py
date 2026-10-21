@@ -203,22 +203,26 @@ def transform_item_popularity(
 
 
 def transform_benchmarks(bench_result: dict) -> dict:
-    """Extract the four ascending benchmark arrays from OpenDota benchmarks.
+    """Extract the six ascending benchmark arrays from OpenDota benchmarks.
 
     OpenDota returns:
         {
-          "gold_per_min":      [{"percentile": 0.1, "value": 312}, ...],
-          "xp_per_min":        [...],
-          "last_hits_per_min": [...],
-          "hero_damage_per_min": [...]   # DROPPED (YAGNI)
+          "gold_per_min":        [{"percentile": 0.1, "value": 312}, ...],
+          "xp_per_min":          [...],
+          "last_hits_per_min":   [...],
+          "hero_damage_per_min": [...],
+          "kills_per_min":       [...],
         }
 
-    Returns a flat dict with parallel arrays:
+    Returns a flat dict with parallel arrays (hero_damage_per_min + kills_per_min
+    feed the live performance scorecard; empty for any key OpenDota omits):
         {
-          "percentiles":       [0.1, 0.2, ...],
-          "gold_per_min":      [312, 378, ...],
-          "xp_per_min":        [402, 468, ...],
-          "last_hits_per_min": [3.1, 4.0, ...]
+          "percentiles":         [0.1, 0.2, ...],
+          "gold_per_min":        [312, 378, ...],
+          "xp_per_min":          [402, 468, ...],
+          "last_hits_per_min":   [3.1, 4.0, ...],
+          "hero_damage_per_min": [300, 450, ...],
+          "kills_per_min":       [0.1, 0.2, ...],
         }
     """
     # Anchor on gold_per_min to extract percentile spine
@@ -230,11 +234,32 @@ def transform_benchmarks(bench_result: dict) -> dict:
         return [row["value"] for row in rows]
 
     return {
-        "percentiles":       percentiles,
-        "gold_per_min":      _extract("gold_per_min"),
-        "xp_per_min":        _extract("xp_per_min"),
-        "last_hits_per_min": _extract("last_hits_per_min"),
+        "percentiles":         percentiles,
+        "gold_per_min":        _extract("gold_per_min"),
+        "xp_per_min":          _extract("xp_per_min"),
+        "last_hits_per_min":   _extract("last_hits_per_min"),
+        # Feed the live performance scorecard (net worth uses item_costs below).
+        "hero_damage_per_min": _extract("hero_damage_per_min"),
+        "kills_per_min":       _extract("kills_per_min"),
     }
+
+
+def build_item_costs(items: dict[str, dict]) -> dict[str, int]:
+    """{"item_blink": 2250, ...} from /api/constants/items `cost` fields.
+
+    Keyed as GSI inventory keys ("item_<name>") so the engine can sum owned
+    items into a live net worth. Skips entries with no numeric cost.
+    """
+    out: dict[str, int] = {}
+    for name, meta in (items or {}).items():
+        cost = (meta or {}).get("cost")
+        if cost is None:
+            continue
+        try:
+            out[f"item_{name}"] = int(cost)
+        except (TypeError, ValueError):
+            continue
+    return out
 
 
 def build_hero_entry(
@@ -305,8 +330,14 @@ def _get_json(url: str) -> dict:
                 time.sleep(30)
             else:
                 raise
-        except urllib.error.URLError:
-            raise
+        except (TimeoutError, urllib.error.URLError) as e:
+            # Socket read timeouts (TimeoutError) and transient connection
+            # errors are retriable — OpenDota is occasionally slow. Only give
+            # up after all attempts are exhausted (falls through to raise).
+            if attempt == 2:
+                raise
+            print(f"  transient network error ({e}); retrying in 5 s…", file=sys.stderr)
+            time.sleep(5)
 
     raise RuntimeError(f"gave up after 3 attempts on {url}")
 
@@ -371,7 +402,7 @@ def main() -> None:
             )
             out_heroes[hero_key] = entry
             print(f"  ✓ {hero_display}")
-        except (KeyError, ValueError, TypeError,
+        except (KeyError, ValueError, TypeError, RuntimeError, TimeoutError,
                 urllib.error.URLError, urllib.error.HTTPError) as exc:
             print(f"  skip hero {hero_key}: {exc}", file=sys.stderr)
             continue
@@ -383,6 +414,7 @@ def main() -> None:
         "source": "opendota",
         "note":   "un-bracketed all-MMR aggregate",
         "heroes": out_heroes,
+        "item_costs": build_item_costs(items),
     }
     CACHE.write_text(json.dumps(payload, indent=2))
     print(f"\nWrote {CACHE} ({len(out_heroes)}/{total} heroes)")

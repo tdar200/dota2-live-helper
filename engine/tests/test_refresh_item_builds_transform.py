@@ -17,7 +17,22 @@ from refresh_item_builds import (
     transform_item_popularity,
     transform_benchmarks,
     build_hero_entry,
+    build_item_costs,
 )
+
+
+def test_build_item_costs_keys_and_filters():
+    items = {
+        "blink": {"dname": "Blink Dagger", "cost": 2250},
+        "manta": {"dname": "Manta Style", "cost": 4600},
+        "recipe_x": {"dname": None, "cost": None},   # no cost -> skipped
+        "ward_observer": {"cost": "0"},               # numeric string -> 0
+    }
+    out = build_item_costs(items)
+    assert out["item_blink"] == 2250
+    assert out["item_manta"] == 4600
+    assert "item_recipe_x" not in out
+    assert out["item_ward_observer"] == 0
 
 # ---------------------------------------------------------------------------
 # Minimal constant stubs shared across tests
@@ -368,18 +383,27 @@ BENCH_RESULT = {
     "last_hits_per_min": [{"percentile": p/10, "value": v}
                           for p, v in zip(range(1, 12),
                                           [3.1,4.0,4.7,5.3,5.9,6.5,7.2,8.0,9.1,9.9,11.4])],
-    "hero_damage_per_min": [{"percentile": 0.1, "value": 100}],  # must be dropped
+    "hero_damage_per_min": [{"percentile": p/10, "value": v}
+                            for p, v in zip(range(1, 12),
+                                            [300,450,600,750,900,1100,1350,1650,2100,2500,3200])],
+    "kills_per_min":       [{"percentile": p/10, "value": v}
+                            for p, v in zip(range(1, 12),
+                                            [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.1,1.5])],
 }
 
 
-def test_transform_benchmarks_returns_four_keys():
+def test_transform_benchmarks_returns_scorecard_keys():
     out = transform_benchmarks(BENCH_RESULT)
-    assert set(out.keys()) == {"percentiles", "gold_per_min", "xp_per_min", "last_hits_per_min"}
+    assert set(out.keys()) == {
+        "percentiles", "gold_per_min", "xp_per_min", "last_hits_per_min",
+        "hero_damage_per_min", "kills_per_min",
+    }
 
 
-def test_transform_benchmarks_drops_hero_damage():
+def test_transform_benchmarks_keeps_hero_damage_and_kills():
     out = transform_benchmarks(BENCH_RESULT)
-    assert "hero_damage_per_min" not in out
+    assert len(out["hero_damage_per_min"]) == 11
+    assert len(out["kills_per_min"]) == 11
 
 
 def test_transform_benchmarks_length_11():

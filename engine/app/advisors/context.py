@@ -18,6 +18,8 @@ class AdviceContext:
     roshan_dead_clock: int | None = None
     winprob_table: object | None = None
     item_build_db: dict = field(default_factory=dict)
+    # item_key -> gold cost, for live net-worth estimation (empty is fine)
+    item_costs: dict = field(default_factory=dict)
     hero_meta_db: dict = field(default_factory=dict)
     # hero_key -> HeroWR  (your personal per-hero win-rate)
     personal_hero_db: dict = field(default_factory=dict)

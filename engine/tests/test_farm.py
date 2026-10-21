@@ -182,3 +182,88 @@ def test_hero_not_in_db():
                     hero="npc_dota_hero_unknown", db={})
     result = advise(ctx)
     assert result.has_data is False
+
+
+# ---------------------------------------------------------------------------
+# Live performance scorecard: combat stats, net worth, extra percentiles, verdict
+# ---------------------------------------------------------------------------
+
+def _scorecard_ctx(*, kills=6, deaths=2, assists=5, last_hits=180, denies=8,
+                   hero_damage=15000, net_worth=None, gold=1200, item_costs=None,
+                   items=None, benchmarks=BENCHMARKS):
+    player = PlayerState(
+        gold=gold, gpm=634, xpm=724, last_hits=last_hits, denies=denies,
+        kills=kills, deaths=deaths, assists=assists, hero_damage=hero_damage,
+        net_worth=net_worth,
+    )
+    build = HeroItemBuild(hero_id=8, display="Juggernaut", builds={}, benchmarks=benchmarks)
+    state = GameState(
+        clock_time=600, map=MapState(clock_time=600),
+        hero=HeroState(name=HERO_KEY), player=player,
+        items=items if items is not None else [],
+    )
+    return AdviceContext(
+        state=state, item_build_db={HERO_KEY: build},
+        item_costs=item_costs if item_costs is not None else {},
+    )
+
+
+def test_scorecard_combat_stats_present():
+    result = advise(_scorecard_ctx())
+    by = {c.metric: c for c in result.combat}
+    assert by["KDA"].display == "6/2/5"
+    assert by["LH/DN"].display == "180/8"
+    assert by["HeroDmg"].display == "15.0k"
+
+
+def test_scorecard_net_worth_from_item_costs():
+    # gold 1150 + blink 2250 + manta 4600 = 8000, flagged estimated
+    ctx = _scorecard_ctx(gold=1150, items=["item_blink", "item_manta"],
+                         item_costs={"item_blink": 2250, "item_manta": 4600})
+    result = advise(ctx)
+    assert result.net_worth == 8000
+    assert result.net_worth_estimated is True
+    nw = next(c for c in result.combat if c.metric == "Net Worth")
+    assert nw.display == "8.0k~"
+
+
+def test_scorecard_net_worth_prefers_gsi_field():
+    ctx = _scorecard_ctx(net_worth=12345, gold=1200,
+                         items=["item_blink"], item_costs={"item_blink": 2250})
+    result = advise(ctx)
+    assert result.net_worth == 12345
+    assert result.net_worth_estimated is False
+
+
+def test_scorecard_falls_back_to_gold_without_costs():
+    ctx = _scorecard_ctx(gold=1500, items=["item_blink"], item_costs={})
+    result = advise(ctx)
+    assert result.net_worth is None
+    metrics = {c.metric for c in result.combat}
+    assert "Gold" in metrics
+    assert "Net Worth" not in metrics
+
+
+def test_scorecard_extra_percentiles_when_benchmarks_present():
+    bm = Benchmarks(
+        percentiles=PCTS, gold_per_min=GPM_VALS, xp_per_min=XPM_VALS,
+        last_hits_per_min=LH_VALS,
+        hero_damage_per_min=[300, 450, 600, 750, 900, 1100, 1350, 1650, 2100, 2500, 3200],
+        kills_per_min=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.1, 1.5],
+    )
+    # hero_damage 15000 over 10 min = 1500/min; kills 6 over 10 = 0.6/min
+    result = advise(_scorecard_ctx(benchmarks=bm))
+    names = {m.metric for m in result.metrics}
+    assert "HeroDmg/min" in names
+    assert "Kills/min" in names
+
+
+def test_scorecard_verdict_flags_feeding():
+    result = advise(_scorecard_ctx(kills=1, deaths=8, assists=1))
+    assert result.verdict is not None
+    assert "feeding" in result.verdict
+
+
+def test_scorecard_verdict_winning_fights():
+    result = advise(_scorecard_ctx(kills=9, deaths=2, assists=4))
+    assert "winning fights" in result.verdict

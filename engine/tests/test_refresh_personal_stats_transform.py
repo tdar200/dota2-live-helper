@@ -143,6 +143,39 @@ def test_finalize_respects_min_games():
     assert final["h"]["item_b"]["games"] == 3
 
 
+def test_build_match_history_derives_win_and_sorts_newest_first():
+    id_to_key = {8: "npc_dota_hero_juggernaut", 35: "npc_dota_hero_sniper"}
+    matches = [
+        {"match_id": 100, "start_time": 1000, "player_slot": 2, "radiant_win": True,
+         "hero_id": 8, "kills": 5, "deaths": 2, "assists": 7, "duration": 2100,
+         "party_size": 1, "average_rank": 14},
+        {"match_id": 200, "start_time": 3000, "player_slot": 130, "radiant_win": True,
+         "hero_id": 35},  # Dire slot, radiant won -> loss
+        {"match_id": 300, "start_time": 2000, "player_slot": 0, "radiant_win": None,
+         "hero_id": 8},   # undecided -> win None
+    ]
+    out = rp.build_match_history(matches, id_to_key)
+    assert [r["match_id"] for r in out] == [200, 300, 100]  # newest start_time first
+    m100 = next(r for r in out if r["match_id"] == 100)
+    assert m100["win"] is True and m100["hero"] == "npc_dota_hero_juggernaut"
+    assert m100["kills"] == 5
+    m200 = next(r for r in out if r["match_id"] == 200)
+    assert m200["win"] is False   # dire slot, radiant win
+    m300 = next(r for r in out if r["match_id"] == 300)
+    assert m300["win"] is None    # radiant_win missing
+
+
+def test_build_payload_carries_match_history():
+    payload = rp.build_payload(
+        1, {}, {}, set(), "2026-07-01T00:00:00Z",
+        match_history=[{"match_id": 7, "win": True}],
+    )
+    assert payload["match_history"] == [{"match_id": 7, "win": True}]
+    # default is an empty list, never missing
+    p2 = rp.build_payload(1, {}, {}, set(), "2026-07-01T00:00:00Z")
+    assert p2["match_history"] == []
+
+
 def test_build_payload_and_roundtrip_resume():
     agg: dict = {}
     rp.add_match_items(agg, "h", ["item_manta"], won=True)

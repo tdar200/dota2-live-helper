@@ -5,6 +5,7 @@ export function renderFarm(payload) {
     el.innerHTML = "";
     return;
   }
+  // Percentile rate bars (GPM/XPM/LH, plus HeroDmg/Kills once benchmarks re-pulled)
   const rows = (f.metrics || [])
     .map(
       (m) => `
@@ -15,8 +16,15 @@ export function renderFarm(payload) {
     </div>`
     )
     .join("");
-  const summary = f.summary
-    ? `<div class="farm-summary">${f.summary}</div>`
-    : "";
-  el.innerHTML = rows + summary;
+  // Raw live scorecard chips (K/D/A, LH/DN, HeroDmg, Net Worth) — the Dota-Plus
+  // "how am I doing" readout. Empty until GSI carries these fields mid-game.
+  const chips = (f.combat || [])
+    .map(
+      (c) => `<span class="score-chip"><span class="sc-k">${c.metric}</span> ${c.display}</span>`
+    )
+    .join("");
+  const chipRow = chips ? `<div class="score-row">${chips}</div>` : "";
+  const verdict = f.verdict ? `<div class="score-verdict">${f.verdict}</div>` : "";
+  const summary = f.summary ? `<div class="farm-summary">${f.summary}</div>` : "";
+  el.innerHTML = chipRow + verdict + rows + summary;
 }

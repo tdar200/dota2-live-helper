@@ -47,6 +47,18 @@ def test_parse_gsi_no_abilities_block_degrades():
     assert state.hero.aghanims_shard is None
 
 
+def test_parse_gsi_scorecard_player_fields():
+    raw = json.loads(FIX.read_text())
+    state = parse_gsi(raw)
+    assert state.player.kills == 1
+    assert state.player.deaths == 0
+    assert state.player.assists == 2
+    assert state.player.denies == 3
+    assert state.player.hero_damage == 2400
+    # net_worth is spectator-only; player mode omits it
+    assert state.player.net_worth is None
+
+
 def test_parse_gsi_account_id_from_accountid():
     raw = json.loads(FIX.read_text())
     raw["player"]["accountid"] = "39734272"

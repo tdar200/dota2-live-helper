@@ -53,6 +53,7 @@ def build_advice(state: GameState, *, horizon_s: int = 600, limit: int = 6) -> A
         roshan_dead_clock=state.roshan_dead_clock,
         winprob_table=WINPROB_TABLE,
         item_build_db=ITEM_BUILDS.heroes,
+        item_costs=ITEM_BUILDS.item_costs,
         hero_meta_db=HERO_META.heroes,
         personal_hero_db=PERSONAL_STATS.heroes,
         personal_item_db=PERSONAL_STATS.items,

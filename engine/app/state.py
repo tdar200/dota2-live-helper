@@ -36,6 +36,12 @@ class PlayerState(BaseModel):
     gpm: int | None = None
     xpm: int | None = None
     last_hits: int | None = None
+    denies: int | None = None
+    kills: int | None = None
+    deaths: int | None = None
+    assists: int | None = None
+    hero_damage: int | None = None
+    net_worth: int | None = None  # GSI usually omits in player mode; computed in advisor
     account_id: int | None = None
 
 

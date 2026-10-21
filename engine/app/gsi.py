@@ -104,6 +104,12 @@ def parse_gsi(raw: dict) -> GameState:
             gpm=p.get("gpm"),
             xpm=p.get("xpm"),
             last_hits=p.get("last_hits"),
+            denies=p.get("denies"),
+            kills=p.get("kills"),
+            deaths=p.get("deaths"),
+            assists=p.get("assists"),
+            hero_damage=p.get("hero_damage"),
+            net_worth=p.get("net_worth"),  # spectator-only in practice; advisor computes a fallback
             account_id=_account_id(p),
         ),
         items=items,
